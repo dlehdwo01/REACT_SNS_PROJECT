@@ -10,9 +10,9 @@ const Login = () => {
         id: ""
     });
 
-    const fnId = () => {
-        console.log("blur", document.querySelector("#id").value);
-        setUser({ ...user, id: document.querySelector("#id").value })
+    const inputBlur = (e) => {
+        console.log(e.target.value);
+        console.log(e.target.id);
 
     };
     useEffect(() => {
@@ -41,11 +41,11 @@ const Login = () => {
                 <div className='loginBox' style={{ paddingBottom: '30px' }}>
                     <div><img className='logoImg' src={logo}></img></div>
                     <div className='joinInfo'>친구들의 소식을 온라인으로 빠르고 쉽게 주고 받으세요.</div>
-                    <div><input className='loginInput' placeholder='아이디' id="id" onBlur={fnId}></input></div>
-                    <div><input className='loginInput' placeholder='이름' id="name"></input></div>
-                    <div><input className='loginInput' placeholder='닉네임' id="nickName"></input></div>
-                    <div><input className='loginInput' placeholder='비밀번호' id="pwd"></input></div>
-                    <div><input className='loginInput' placeholder='비밀번호확인' id="pwdCheck"></input></div>
+                    <div><input className='loginInput' placeholder='아이디' id="id" onBlur={inputBlur}></input></div>
+                    <div><input className='loginInput' placeholder='이름' id="name" onBlur={inputBlur}></input></div>
+                    <div><input className='loginInput' placeholder='닉네임' id="nickName" onBlur={inputBlur}></input></div>
+                    <div><input className='loginInput' placeholder='비밀번호' id="pwd" onBlur={inputBlur}></input></div>
+                    <div><input className='loginInput' placeholder='비밀번호확인' id="pwdCheck" onBlur={inputBlur}></input></div>
                     <div><button className='loginBtn'>가입</button></div>
                 </div>
                 <div className='loginBox'>
