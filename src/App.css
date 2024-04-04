@@ -1,0 +1,68 @@
+.homeCont {
+
+    margin-left: 251px;
+    width: calc(100vw - 251px);
+}
+
+.loginCont {
+    display: flex;
+    margin: 0px auto;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.homeSection {
+    height: 1500px;
+}
+
+.loginInput {
+    width: 80%;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    padding: 5px;
+}
+
+.loginBtn {
+    width: 80%;
+    border-radius: 5px;
+    color: white;
+    background-color: #ccc;
+    border: none;
+    padding: 5px;
+    font-weight: bold;
+}
+
+.loginBox {
+    border: 1px solid #ccc;
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    padding: 15px;
+    color: #5f5f5f;
+    font-size: 13px;
+}
+
+.loginBox>div {
+    width: 100%;
+    text-align: center;
+}
+
+.logoImg {
+    width: 200px;
+    margin: 20px 0px;
+}
+
+.LinkText {
+    text-decoration: none;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.joinInfo{
+    font-weight: 700;
+    font-size: 12px;
+    margin-bottom: 20px;
+    color: #5f5f5f;
+}
