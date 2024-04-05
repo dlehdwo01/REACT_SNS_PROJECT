@@ -20,6 +20,7 @@
     border-radius: 3px;
     border: 1px solid #ccc;
     padding: 5px;
+    padding-right: 30px;
 }
 
 .loginBtn {
@@ -44,6 +45,18 @@
     font-size: 13px;
 }
 
+.result{
+    position: absolute;
+    top: 5px;
+    right: 37px;
+}
+
+.resultImg{
+    width: 20px;
+    height: 20px;
+}
+
+
 .loginBox>div {
     width: 100%;
     text-align: center;
@@ -65,4 +78,8 @@
     font-size: 12px;
     margin-bottom: 20px;
     color: #5f5f5f;
+}
+
+.error{
+    color: red;
 }

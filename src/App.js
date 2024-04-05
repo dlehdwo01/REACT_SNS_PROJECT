@@ -8,7 +8,7 @@ import Nav from './components/Nav';
 import Menu from './components/Menu'
 // ~ js import
 import './App.css';
-import * as React from 'react';
+import { useEffect } from 'react';
 import {
   createBrowserRouter,
   RouterProvider,
@@ -17,25 +17,49 @@ import {
   Link,
   BrowserRouter as Router
 } from "react-router-dom";
+import { createStore } from 'redux';
+import { Provider, useSelector } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.min.css'
 
+const reducer = (state, action) => {
+  if (state == null) {
+    return { id: 'good' };
+  }
+  return state;
+};
+const store = createStore(reducer);
 
 const App = () => {
+  // useEffect(() => {
+  //   const sessionCheck = async () => {
+  //     try {
+  //       const response = await fetch(`http://localhost:4000/sessionCheck.dox`);
+  //       const jsonData = await response.json();
+  //       console.log(jsonData);
+  //     } catch (error) {
+  //       console.error("에러!");
+  //     }
+  //   };
+  //   sessionCheck();
+  // },[])
+
+
 
   return (
-    <div id="Container">
-      <Router>
-        {/* <Nav></Nav> */}
-        <Routes>
-          <Route path="/" element={<Login></Login>}></Route>
-          <Route path="/join" element={<Join></Join>}></Route>
-          <Route path="/home" element={<Home></Home>}></Route>
-          <Route path="/home/:userId" element={<User></User>}></Route>
-          <Route path="/profile" element={<Profile></Profile>}></Route>
-        </Routes>
-      </Router>
-
-    </div>
+    <Provider store={store}>
+      <div id="Container">
+        <Router>
+          {/* <Nav></Nav> */}
+          <Routes>
+            <Route path="/" element={<Login></Login>}></Route>
+            <Route path="/join" element={<Join></Join>}></Route>
+            <Route path="/home" element={<Home></Home>}></Route>
+            <Route path="/home/:userId" element={<User></User>}></Route>
+            <Route path="/profile" element={<Profile></Profile>}></Route>
+          </Routes>
+        </Router>
+      </div>
+    </Provider>
   );
 }
 

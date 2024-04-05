@@ -6,16 +6,26 @@ import plus from './icons/plus.png';
 import logo from './icons/logo.png';
 import more from './icons/more.png';
 import close from './icons/close.png';
+import upload from './icons/upload.png';
 // ~ icons
 
 // components ~
 import Search from './Search'
 import Alert from './Alert'
+import Upload from './Upload'
 // ~components
 
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Menu.css';
+import { useSelector } from 'react-redux';
+
 const Menu = () => {
+
+    // 만들기
+    const [addFlg, setAddFlg] = useState(false);
+
+    const navigate = useNavigate();
     // 더보기 클릭시
     let [moreMenuFlg, setMoreMenuFlg] = useState(false);
     // 더보기 클릭 이후 다른 곳 클릭시
@@ -60,7 +70,9 @@ const Menu = () => {
                     </div>
 
 
-                    <div>
+                    <div onClick={() => {
+                        navigate('/home');
+                    }}>
                         <img className='menuImg' src={home}></img>
                         홈</div>
 
@@ -80,13 +92,17 @@ const Menu = () => {
                         알림</div>
 
 
-                    <div>
+                    <div onClick={() => {
+                        setAddFlg(true);
+                    }}>
                         <img className='menuImg' src={plus}></img>
                         만들기</div>
 
 
-                    <div>
-                        <img className='profileImg'></img>
+                    <div onClick={() => {
+                        navigate(`/home/test`);
+                    }}>
+                        <img className='profileImg' ></img>
                         프로필</div>
 
 
@@ -108,19 +124,9 @@ const Menu = () => {
                 </div>}
 
                 {/* 만들기 클릭시 */}
-                {false && <div className='modalBg'>
-                    <div className='modalSection'>
-                        <div className='sort-column gap-10'>
-                            <h4>사진 등록</h4>
-                            <div className='addBoardImg'>
-                                <img></img>
-                            </div>
-                            <div><input type="file"></input></div>
-                            <div></div>
-                        </div>
-
-                    </div>
-                </div>}
+                {addFlg && <Upload onCancel={() => {
+                    setAddFlg(false);
+                }}></Upload>}
 
                 {/* 더보기 클릭시 */}
                 {/* {moreMenuFlg &&  */}
