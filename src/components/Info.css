@@ -13,18 +13,22 @@
     height: 170px;
     border: 1px solid #ccc;
     border-radius: 50%;
+    overflow: hidden;
 }
 
-.userInfo {
-    width: 400px;
+.userInfo {    
     display: flex;
     gap: 10px;
 }
 
 .userNickName {
-    font-size: 19px;
+    font-size: 15px;
     font-weight: 500;
     margin-right: 20px;
+    text-wrap: nowrap;
+    display: flex;
+    align-items: center;
+    
 }
 
 .userInfo>button {
@@ -84,14 +88,19 @@
     min-width: 500px;
     margin: auto;
     margin-top: 20px;
-    z-index: -1;
 }
 
 .userBoard {
+    overflow: hidden;
     border: 1px solid #ccc;
     aspect-ratio: 1 / 1;
     min-width: 150px;
     position: relative;
+    z-index: +1;
+}
+
+.userBoard:hover .userBoardInfo{
+    display: block;
 }
 
 .userBoardInfo {
@@ -104,16 +113,19 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    display: none;
+    cursor: pointer;
 }
+
+
 
 .userBoardTextBox {
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
     width: 90%;
     text-align: center;
-    
 }
 
 .userBoardText {
@@ -122,6 +134,16 @@
     color: white;
     font-weight: bold;
     padding: 0px 10px;
+}
 
+.userProfileImg>img {
+    width: 100%;
+    object-fit: scale-down;
+    height: 100%;
+}
 
+.userBoard>img {
+    width: 100%;
+    height: 100%;
+    object-fit: scale-down;
 }

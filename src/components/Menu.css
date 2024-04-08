@@ -13,6 +13,7 @@
   flex-direction: column;
   justify-content: space-between;
   border-right: 1px solid #ccc;
+  z-index: 2;
 }
 
 .menuSort {
@@ -136,6 +137,7 @@
 }
 
 .modalBg {
+  z-index: 5;
   position: fixed;
   background-color: #2929295e;
   top: 0px;
@@ -170,12 +172,24 @@
   overflow: hidden;
 }
 
+.profileNickName{
+  border: none;
+  padding: 5px 10px;
+  text-align: center;
+  
+}
+
+.profileNickName:focus{
+  outline: none
+}
+
 .one {
   width: 20vw;
   margin: 0px auto;
   min-width: 200px;
   aspect-ratio: 1 / 1;
   overflow: hidden;
+  border: 2px dashed #ededed;
 }
 
 .one>img {
@@ -187,7 +201,7 @@
 
 .addBoardImg>img {
   width: 100%;
-  height: auto;
+  height: 100%;
   object-fit: scale-down;
   /* 이미지가 요소에 꽉 차도록 설정 */
 
@@ -263,7 +277,13 @@
   font-size: 12px;
   padding: 10px;
 }
-.introduceInputText:focus{
+
+.borderGray {
+  border: 1px solid #ededed;
+  border-radius: 10px;
+}
+
+.introduceInputText:focus {
   outline: none;
 }
 
@@ -300,5 +320,13 @@
   position: absolute;
   right: 10px;
   top: 10px;
+  cursor: pointer;
+}
+
+.plusImg {
+  width: 10vw;
+  object-fit: scale-down;
+  border: 1px solid #ccc;
+  aspect-ratio: 1 / 1;
   cursor: pointer;
 }

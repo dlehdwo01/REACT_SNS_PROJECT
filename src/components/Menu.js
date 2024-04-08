@@ -58,88 +58,90 @@ const Menu = () => {
 
 
     return (
-        <div>
-            <div className='menuCont'>
-                <div className='menuSort'>
-                    <div className='logoBox'>
-                        {(searchFlg || alertFlg) && <img className='menuImg' src={close} onClick={() => {
-                            setSearchFlg(false);
-                            setAlertFlg(false);
-                        }}></img>}
-                        {!(searchFlg || alertFlg) && <img className='logoImg' src={logo}></img>}
-                    </div>
 
-
-                    <div onClick={() => {
+        <div className='menuCont'>
+            <div className='menuSort'>
+                <div className='logoBox'>
+                    {(searchFlg || alertFlg) && <img className='menuImg' src={close} onClick={() => {
+                        setSearchFlg(false);
+                        setAlertFlg(false);
+                    }}></img>}
+                    {!(searchFlg || alertFlg) && <img className='logoImg' src={logo} onClick={() => {
                         navigate('/home');
-                    }}>
-                        <img className='menuImg' src={home}></img>
-                        홈</div>
-
-
-                    <div onClick={() => {
-                        menuClick(setSearchFlg);
-                    }}>
-                        <img className='menuImg' src={search}></img>
-                        검색</div>
-
-
-                    <div style={{ position: "relative" }} onClick={() => {
-                        menuClick(setAlertFlg);
-                    }}>
-                        <div className='alertPoint'></div>
-                        <img className='menuImg' src={heart}></img>
-                        알림</div>
-
-
-                    <div onClick={() => {
-                        setAddFlg(true);
-                    }}>
-                        <img className='menuImg' src={plus}></img>
-                        만들기</div>
-
-
-                    <div onClick={() => {
-                        navigate(`/home/test`);
-                    }}>
-                        <img className='profileImg' ></img>
-                        프로필</div>
-
-
+                    }}></img>}
                 </div>
 
-                <div className='menuSort' onClick={() => {
-                    setMoreMenuFlg(true);
+
+                <div onClick={() => {
+                    navigate('/home');
                 }}>
-                    <div>
-                        <img className='menuImg' src={more}></img>
-                        더보기</div>
-                </div>
+                    <img className='menuImg' src={home}></img>
+                    홈</div>
 
 
-                {/* 메뉴 클릭시 */}
-                {(searchFlg || alertFlg) && <div className='clickMenu'>
-                    {searchFlg && <Search></Search>}
-                    {alertFlg && <Alert></Alert>}
-                </div>}
+                <div onClick={() => {
+                    menuClick(setSearchFlg);
+                }}>
+                    <img className='menuImg' src={search}></img>
+                    검색</div>
 
-                {/* 만들기 클릭시 */}
-                {addFlg && <Upload onCancel={() => {
-                    setAddFlg(false);
-                }}></Upload>}
 
-                {/* 더보기 클릭시 */}
-                {/* {moreMenuFlg &&  */}
-                {moreMenuFlg && <div className='moreMenuCont'>
-                    <div className='moreMenu'>로그아웃</div>
-                </div>}
+                <div style={{ position: "relative" }} onClick={() => {
+                    menuClick(setAlertFlg);
+                }}>
+                    <div className='alertPoint'></div>
+                    <img className='menuImg' src={heart}></img>
+                    알림</div>
 
+
+                <div onClick={() => {
+                    setAddFlg(true);
+                }}>
+                    <img className='menuImg' src={plus}></img>
+                    만들기</div>
+
+
+                <div onClick={() => {
+                    navigate(`/home/test`);
+                }}>
+                    <img className='profileImg' ></img>
+                    프로필</div>
 
 
             </div>
 
+            <div className='menuSort' onClick={() => {
+                setMoreMenuFlg(true);
+            }}>
+                <div>
+                    <img className='menuImg' src={more}></img>
+                    더보기</div>
+            </div>
+
+
+            {/* 메뉴 클릭시 */}
+            {(searchFlg || alertFlg) && <div className='clickMenu'>
+                {searchFlg && <Search></Search>}
+                {alertFlg && <Alert></Alert>}
+            </div>}
+
+            {/* 만들기 클릭시 */}
+            {addFlg && <Upload onCancel={() => {
+                setAddFlg(false);
+            }}></Upload>}
+
+            {/* 더보기 클릭시 */}
+            {/* {moreMenuFlg &&  */}
+            {moreMenuFlg && <div className='moreMenuCont'>
+                <div className='moreMenu'>로그아웃</div>
+            </div>}
+
+
 
         </div>
+
+
+
     );
 }
 export default Menu;

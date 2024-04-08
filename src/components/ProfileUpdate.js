@@ -2,6 +2,7 @@
 import left from './icons/left.png';
 import upload from './icons/upload.png';
 import exit from './icons/exit.png';
+import pencil from './icons/pencil.png';
 // ~ icons
 
 // components ~
@@ -13,12 +14,18 @@ import { useNavigate } from 'react-router-dom';
 import './Menu.css';
 import { useSelector } from 'react-redux';
 
-const ProfileUploadUpload = (props) => {
-    const [user, setUser] = useState({
-        id: "test",
-        profileImg: "",
-        introduce: ""
-    });
+const ProfileUpdate = (props) => {
+
+    const [user, setUser] = useState(props.user);
+    const [filePath, setFilePath] = useState("");
+    useEffect(() => {
+        console.log(user);
+        setFilePath(`http://localhost:4000/${user.FILEPATH}${user.FILENAME}`);
+
+    }, [user])
+
+    const [nickNameFlg, setNickNameFlg] = useState(false);
+
     const [order, setOrder] = useState(1);
     const navigate = useNavigate();
     const [fileInfo, setFileInfo] = useState({});
@@ -46,7 +53,7 @@ const ProfileUploadUpload = (props) => {
         const file = event.dataTransfer.files[0];
         setFileInfo(file);
         previewFile(file);
-        setOrder(2);
+        setOrder(1);
         setActive(false);
     }
 
@@ -56,23 +63,29 @@ const ProfileUploadUpload = (props) => {
         const file = fileInput.files[0];
         setFileInfo(file);
         previewFile(file);
-        setOrder(2);
+        setOrder(1);
     };
 
-    const fnUpdate = async () => {
+    // 완료처리
+    const fnUpload = async () => {
         const formData = new FormData();
+
         formData.append('file', fileInfo);
         for (const [key, value] of Object.entries(user)) {
             formData.append(key, value);
         }
-
         try {
             const response = await fetch('http://localhost:4000/editProfile', {
                 method: 'POST',
                 body: formData
             });
             const data = await response.json();
-            console.log(data); // 서버에서 받은 응답 확인
+            if (data.result == "success") {
+                alert("수정완료");
+                window.location.reload();
+            } else {
+                alert("실패");
+            }
         } catch (error) {
             console.error('Error uploading file:', error);
         }
@@ -90,36 +103,53 @@ const ProfileUploadUpload = (props) => {
             {/* 만들기 클릭시 */}
             <div className='modalSection'>
 
-                {/* 사진등록 후 */}
-                {order == 2 &&
+                {/* 첫번째 화면 */}
+                {order == 1 &&
                     <div className='sort-column gap-10'>
                         <div className='modalTitle text-center'>
 
-                            <span className='float-start d-absolute' onClick={() => { setOrder(1) }} style={{ cursor: 'pointer' }}><img src={left} className='prev-btn'></img></span>
-                            <div className='fs-5 fw-bold d-flex justify-content-center align-items-center h-100' style={{ width: '87%' }}>
-                                프로필 사진 변경
+                            {/* <span className='float-start d-absolute' onClick={() => { setOrder(1) }} style={{ cursor: 'pointer' }}><img src={left} className='prev-btn'></img></span> */}
+                            <div className='fs-5 fw-bold d-flex justify-content-center align-items-center h-100' >
+                                프로필 수정
                             </div>
                         </div>
-                        <div className='d-flex flex-column addImgAfter align-items-center gap-10'>
-                            <div className='border rounded-circle one'>
-                                <img src={filePreview}></img>
+                        <div className='d-flex addImgAfter flex-column align-items-center gap-10'>
+                            <div style={{ cursor: 'pointer' }} className='rounded-circle one ' onClick={() => {
+                                setOrder(2);
+                            }}>
+                                {!filePreview && <img src={filePath}></img>}
+                                {filePreview && <img src={filePreview}></img>}
                             </div>
-                            <div className='d-flex flex-column align-items-center gap-10'>
-                                <span className='fs-5 fw-bold'>소개</span>
-                                <textarea className='introduceInputText ' placeholder='내용을 적어주세요' onChange={(e) => {
-                                    setUser({ ...user, introduce: e.target.value });                                    
-                                }} ></textarea>
-                                <div><button onClick={fnUpdate}>완료</button></div>
+                            <div>
+                                {nickNameFlg && <input value={user.NICKNAME} className='profileNickName' onChange={(e) => {
+                                    setUser({ ...user, NICKNAME: e.target.value })
+                                }}></input>}
+
+                                {!nickNameFlg && <span>{user.NICKNAME}</span>}
+                                <img src={pencil} style={{ width: '12px', cursor: 'pointer', marginLeft: '3px' }} onClick={() => { setNickNameFlg(true); }}></img>
+
                             </div>
+
+                            <div>
+                                <textarea className='introduceInputText borderGray' placeholder='당신을 소개해보세요' onChange={(e) => {
+                                    setUser({ ...user, INTRODUCE: e.target.value });
+
+                                }} value={user.INTRODUCE}></textarea>
+                            </div>
+                            <div>
+                                <button onClick={fnUpload}>완료</button>
+                            </div>
+
                         </div>
                     </div>}
 
                 {/* 사진등록 */}
-                {order == 1 &&
+                {order == 2 &&
                     <div className='sort-column gap-10'>
                         <div className='modalTitle'>
+                            <span className='float-start d-absolute' onClick={() => { setOrder(1) }} style={{ cursor: 'pointer' }}><img src={left} className='prev-btn'></img></span>
                             <div className='fs-5 fw-bold d-flex justify-content-center align-items-center h-100' >
-                                프로필 사진 변경
+                                사진 등록
                             </div>
                         </div>
                         <div className='addBoardImg'>
@@ -140,7 +170,7 @@ const ProfileUploadUpload = (props) => {
                     </div>}
 
             </div>
-        </div>
+        </div >
     );
 }
-export default ProfileUploadUpload;
+export default ProfileUpdate;

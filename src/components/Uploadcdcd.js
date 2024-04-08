@@ -14,16 +14,21 @@ import './Menu.css';
 import { useSelector } from 'react-redux';
 
 const Upload = (props) => {
-    const [fileList, setFileList] = useState([]);
-    const [filePreviewList, setFilePreviewList] = useState([]);
-    const [fileNo, setFileNo] = useState(0);
-
-
+    
     const [user, setUser] = useState({
         id: "test",
         profileImg: "",
         boardContents: ""
     });
+
+    const list = [
+        <div key={1} onClick={(e,index)=>{
+            console.log(e.target);
+        }}>1</div>,
+        <div>2</div>,
+        <div>3</div>
+        
+    ]
     const [order, setOrder] = useState(1);
     const navigate = useNavigate();
     const [fileInfo, setFileInfo] = useState({});
@@ -34,15 +39,11 @@ const Upload = (props) => {
 
     // 미리보기 파일
     const previewFile = (file) => {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => {
-                setFilePreview(reader.result); // 파일의 데이터 URL을 상태에 설정
-                setFileList([...fileList, file]);
-                resolve(reader.result);
-            };
-            reader.readAsDataURL(file); // 파일을 읽어 데이터 URL 생성                
-        });
+        const reader = new FileReader();
+        reader.onload = () => {
+            setFilePreview(reader.result); // 파일의 데이터 URL을 상태에 설정
+        };
+        reader.readAsDataURL(file); // 파일을 읽어 데이터 URL 생성
     };
 
     const handleDragOver = (event) => {
@@ -50,49 +51,27 @@ const Upload = (props) => {
     };
 
     // 파일 드롭으로 추가하기
-    const handleDrop = async (event) => {
+    const handleDrop = (event) => {
         event.preventDefault();
         const file = event.dataTransfer.files[0];
         setFileInfo(file);
-        const filePreview = await previewFile(file);
-
+        previewFile(file);
         setOrder(2);
         setActive(false);
-        setFilePreviewList([...filePreviewList,
-        <img className='plusImg' src={filePreview}
-            onClick={() => {
-                setFilePreview(filePreview);
-            }} />])
     }
 
-
     // 클릭으로 파일 추가하기
-    const uploadFile = async () => {
+    const uploadFile = () => {
         const fileInput = document.getElementById('fileInput');
         const file = fileInput.files[0];
         setFileInfo(file);
-        const filePreview = await previewFile(file);
+        previewFile(file);
         setOrder(2);
-        setFilePreviewList([...filePreviewList,
-        <img className='plusImg' src={filePreview}
-            onClick={() => {
-                setFilePreview(filePreview);
-            }} />])
     };
 
-    useEffect(() => {
-        console.log(filePreviewList);
-        console.log(fileList);
-    }, [fileList])
-
-    // 게시글 등록
     const fnUpload = async () => {
         const formData = new FormData();
-
-        fileList.forEach(file => {
-            formData.append('files', file);
-        });
-
+        formData.append('file', fileInfo);
         for (const [key, value] of Object.entries(user)) {
             formData.append(key, value);
         }
@@ -107,18 +86,6 @@ const Upload = (props) => {
             console.error('Error uploading file:', error);
         }
     }
-    const removeItemAtIndex = (indexToRemove) => {
-        setFileList(prevList => {
-            return prevList.filter((_, index) => index !== indexToRemove);
-        });
-        setFilePreviewList(prevList => {
-            return prevList.filter((_, index) => index !== indexToRemove);
-        });
-    };
-
-    const fnDelete = () => {
-        removeItemAtIndex(fileNo);
-    };
 
     return (
         <div className='modalBg'>
@@ -141,6 +108,7 @@ const Upload = (props) => {
                             <div className='fs-5 fw-bold d-flex justify-content-center align-items-center h-100' style={{ width: '87%' }}>
                                 사진 등록
                             </div>
+                            {list}
                         </div>
                         <div className='d-flex addImgAfter'>
                             <div className='addBoardImg border'>
@@ -155,17 +123,12 @@ const Upload = (props) => {
                                     setUser({ ...user, boardContents: e.target.value });
                                 }}></textarea>
                                 <div><button onClick={fnUpload}>완료</button></div>
-                                <div><button onClick={fnDelete}>삭제</button></div>
                             </div>
                         </div>
                         <div className='d-flex gap-10'>
-                            {filePreviewList.map((preview, index) => (
-                                <div key={index} onClick={() => {
-                                    setFileNo(index);
-                                }}>
-                                    {preview}
-                                </div>
-                            ))}
+                            <div className='plusImg'>
+                                <img></img>
+                            </div>
                         </div>
                     </div>}
 
@@ -192,7 +155,7 @@ const Upload = (props) => {
                                 </div>
                             </label>
                         </div>
-
+                        
                     </div>}
 
             </div>
