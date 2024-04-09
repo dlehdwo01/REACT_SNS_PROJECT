@@ -209,7 +209,7 @@ app.post('/uploadBoardFile', (req, res) => {
 app.post('/getUserBoardList.dox', function (req, res) {
     var map = req.body;
     console.log(map);
-    connection.query("SELECT * FROM tbl_board b left JOIN tbl_board_file f ON b.BOARDNO=f.BOARDNO WHERE userid=? GROUP BY b.boardno", [map.id], function (error, results, fields) {
+    connection.query("SELECT b.*,FILEPATH,FILENAME FROM tbl_board b left JOIN tbl_board_file f ON b.BOARDNO=f.BOARDNO WHERE userid=? GROUP BY b.boardno", [map.id], function (error, results, fields) {
         if (error) {
             console.error('Error inserting user into database: ' + error.stack);
             res.status(500).send('Error inserting user into database');
@@ -321,7 +321,7 @@ app.post('/boardFiles.dox', function (req, res) {
 app.post('/getBoardList.dox', function (req, res) {
     const map = req.body;
     console.log(map);
-    connection.query("SELECT *,DATE_FORMAT(B.CDATETIME,'%y년 %m월 %d일 %h시%i분') AS DATEFORM  FROM tbl_board B INNER JOIN tbl_user U ON B.USERID = U.USERID ORDER BY B.CDATETIME DESC LIMIT ?,10", [map.page], function (error, results, fields) {
+    connection.query("SELECT *,DATE_FORMAT(B.CDATETIME,'%y년 %m월 %d일 %h시%i분') AS DATEFORM  FROM tbl_board B INNER JOIN tbl_user U ON B.USERID = U.USERID ORDER BY B.CDATETIME DESC LIMIT ?,10", [map.page * 10], function (error, results, fields) {
         if (error) {
             console.error('Error inserting user into database: ' + error.stack);
             res.status(500).send('Error inserting user into database');
@@ -334,8 +334,10 @@ app.post('/getBoardList.dox', function (req, res) {
 // 전체 게시물 파일 불러오기
 app.post('/getBoardFileList.dox', function (req, res) {
     const map = req.body;
-    console.log(map);
-    connection.query("SELECT * FROM TBL_BOARD_FILE WHERE BOARDNO IN (?)", [map], function (error, results, fields) {
+    if (map.list.length == 0) {
+        return;
+    }
+    connection.query("SELECT * FROM TBL_BOARD_FILE WHERE BOARDNO IN (?)", [map.list], function (error, results, fields) {
         if (error) {
             console.error('Error inserting user into database: ' + error.stack);
             res.status(500).send('Error inserting user into database');
