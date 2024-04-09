@@ -12,10 +12,38 @@ import './Board.css';
 import 'swiper/css';
 
 const Board = () => {
+
+    const sessionId = sessionStorage.getItem("sessionId");
+    const [HeartList, setHeartList] = useState([]);
+    const getHeart = async () => {
+        try {
+            const response = await fetch(`http://localhost:4000/getHeart.dox`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ userId: sessionId })
+            });
+            const jsonData = await response.json();
+            setHeartList(jsonData);
+            console.log("getHeartList");
+
+        } catch (error) {
+            console.error("에러!");
+        }
+    }
+    useEffect(() => {
+        if (sessionId == "") {
+            return;
+        }
+        getHeart();
+    }, [])
     const [page, setPage] = useState(0);
     const [boardNoList, setBoardNoList] = useState([]);
     const [boardList, setBoardList] = useState([]);
     const [boardFileList, setBoardFileList] = useState([]);
+
+    const [totalBoard,setTotalBoard] = useState([]);
     const [boardViewList, setBoardViewList] = useState([]);
 
     const [ref, inView] = useInView({
@@ -28,29 +56,6 @@ const Board = () => {
             setPage(page + 1);
         }
     }, [inView])
-
-    // 페이지 증가시
-    useEffect(() => {
-        return;
-        const changedPage = async () => {
-            try {
-                const response = await fetch(`http://localhost:4000/getBoardList.dox`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ page: page })
-                });
-                const jsonData = await response.json();
-                setBoardList(jsonData);
-                const boardNoList = await jsonData.map(item => item.BOARDNO);
-                setBoardNoList(boardNoList);
-            } catch (error) {
-                console.error("에러!");
-            }
-        }
-        changedPage();
-    }, [page])
 
     // 게시물 리스트 가져오기
     useEffect(() => {
@@ -65,7 +70,9 @@ const Board = () => {
                     body: JSON.stringify({ page: page })
                 });
                 const jsonData = await response.json();
+                // console.log(jsonData);
                 setBoardList(jsonData);
+                setTotalBoard([...totalBoard,jsonData]);
                 const boardNoList = await jsonData.map(item => item.BOARDNO);
                 setBoardNoList(boardNoList);
 
@@ -76,6 +83,9 @@ const Board = () => {
 
         getBoardList();
     }, [page])
+    useEffect(()=>{
+        console.log(totalBoard);
+    })
 
     useEffect(() => {
         // 게시물 첨부파일 가져오기
@@ -89,7 +99,7 @@ const Board = () => {
                     body: JSON.stringify({ list: boardNoList })
                 });
                 const jsonData = await response.json();
-                console.log(jsonData)
+                // console.log(jsonData)
                 setBoardFileList(jsonData);
             } catch (error) {
                 console.error("에러!");
@@ -100,21 +110,24 @@ const Board = () => {
 
     // 좋아요 클릭시
     const setHeart = async (boardNo) => {
+        if (sessionId == "") {
+            return;
+        }
         try {
             const response = await fetch(`http://localhost:4000/setHeart.dox`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ boardNo: boardNo })
+                body: JSON.stringify({ boardNo: boardNo, userId: sessionId })
             });
             const jsonData = await response.json();
-            console.log(jsonData)
+            // console.log(jsonData);
+            getHeart()
         } catch (error) {
             console.error("에러!");
         }
     }
-
 
     // 게시물 리스트 출력
     useEffect(() => {
@@ -158,12 +171,31 @@ const Board = () => {
                     </div>
                     <div className='boardFunction'>
                         <div className='boardFunction'>
-                            <img src={heart} onClick={() => { }}></img>
-                            <img src={redheart}></img>
+                            {HeartList.find(item => item.BOARDNO === boardList[i].BOARDNO) ?
+                                <img src={redheart} onClick={(e) => {
+                                    setHeart(boardList[i].BOARDNO)
+                                    
+                                    if (e.target.src == heart) {
+                                        e.target.src = redheart;
+                                    } else {
+                                        e.target.src = heart;
+                                    }
+                                }} />
+                                :
+                                <img src={heart} onClick={(e) => {
+                                    setHeart(boardList[i].BOARDNO)
+                                    
+                                    if (e.target.src == heart) {
+                                        e.target.src = redheart;
+                                    } else {
+                                        e.target.src = heart;
+                                    }
+                                }} />
+                            }
                             <img src={comment}></img>
                         </div>
                     </div>
-                    <div className='boardLike'></div>
+                    <div className='boardLike'>좋아요 {boardList[i].LIKECNT}개</div>
                     <div className='boardContents'>
                         <div className='contentsUser'>{boardList[i].NICKNAME}</div>
                         <div className='contents'>{boardList[i].CONTENTS}</div>
@@ -173,10 +205,17 @@ const Board = () => {
                 </div >
             )
         }
-        setBoardViewList([...boardViewList, ...list]);
-        console.log(boardViewList);
+        const uniqueList = Array.from(new Set([...boardViewList, ...list]));
+        
+        
+        setBoardViewList(uniqueList); // 이전 상태를 복사하고 새로운 요소를 추가
+        // setBoardViewList([...boardViewList, ...list]);
         // setBoardViewList(list);
-    }, [boardFileList])
+    }, [boardFileList,HeartList])
+    useEffect(() => {
+        // console.log();
+
+    }, [boardViewList])
 
 
     return (

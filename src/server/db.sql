@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `tbl_board` (
   PRIMARY KEY (`BOARDNO`)
 ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- 테이블 데이터 sns.tbl_board:~9 rows (대략적) 내보내기
+-- 테이블 데이터 sns.tbl_board:~14 rows (대략적) 내보내기
 INSERT INTO `tbl_board` (`BOARDNO`, `USERID`, `CONTENTS`, `CDATETIME`) VALUES
 	(1, 'test', 'asdasd', '2024-04-05 17:16:48'),
 	(2, 'test', 'asdasd', '2024-04-05 17:17:12'),
@@ -51,7 +51,12 @@ INSERT INTO `tbl_board` (`BOARDNO`, `USERID`, `CONTENTS`, `CDATETIME`) VALUES
 	(16, 'test', 'ㅁㄴㅇㅁㄴㅇ', '2024-04-05 17:34:03'),
 	(17, 'test', '2개 했어요', '2024-04-08 16:10:28'),
 	(18, 'test', '움헤헤 이거도 두개', '2024-04-08 17:16:41'),
-	(19, 'test', '움하하하', '2024-04-09 14:33:40');
+	(19, 'test', '움하하하', '2024-04-09 14:33:40'),
+	(20, 'test', '내가 제일 잘나가', '2024-04-09 15:06:38'),
+	(21, 'test', '유후', '2024-04-09 15:16:58'),
+	(22, 'asd', '곰돌짱', '2024-04-09 15:18:47'),
+	(23, 'asd', '바쁘다 바빠', '2024-04-09 15:19:18'),
+	(24, 'asd', '인스타그램입니다', '2024-04-09 16:22:15');
 
 -- 테이블 sns.tbl_board_file 구조 내보내기
 CREATE TABLE IF NOT EXISTS `tbl_board_file` (
@@ -85,7 +90,13 @@ INSERT INTO `tbl_board_file` (`FILENO`, `BOARDNO`, `FILEPATH`, `FILENAME`, `FILE
 	(24, 18, 'boardFile/', '1712564201435.png', '1712541441676.png', '833702', 'png'),
 	(25, 18, 'boardFile/', '1712564201440.gif', '1712308541719.gif', '13853', 'gif'),
 	(26, 19, 'boardFile/', '1712640820199.png', 'logo.png', '115999', 'png'),
-	(27, 19, 'boardFile/', '1712640820200.png', 'logo_gray.png', '69458', 'png');
+	(27, 19, 'boardFile/', '1712640820200.png', 'logo_gray.png', '69458', 'png'),
+	(28, 20, 'boardFile/', '1712642798027.jpg', 'cup-7.jpg', '16841', 'jpg'),
+	(29, 21, 'boardFile/', '1712643418763.jpg', 'cup-7.jpg', '16841', 'jpg'),
+	(30, 22, 'boardFile/', '1712643527272.jpg', 'bear.jpg', '19738', 'jpg'),
+	(31, 23, 'boardFile/', '1712643558116.jpg', 'bear.jpg', '19738', 'jpg'),
+	(32, 23, 'boardFile/', '1712643558117.jpg', 'programming.jpg', '15353', 'jpg'),
+	(33, 24, 'boardFile/', '1712647335671.png', 'sns-3.png', '1546', 'png');
 
 -- 테이블 sns.tbl_board_like 구조 내보내기
 CREATE TABLE IF NOT EXISTS `tbl_board_like` (
@@ -93,7 +104,19 @@ CREATE TABLE IF NOT EXISTS `tbl_board_like` (
   `USERID` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- 테이블 데이터 sns.tbl_board_like:~0 rows (대략적) 내보내기
+-- 테이블 데이터 sns.tbl_board_like:~11 rows (대략적) 내보내기
+INSERT INTO `tbl_board_like` (`BOARDNO`, `USERID`) VALUES
+	(22, 'asd'),
+	(21, 'asd'),
+	(19, 'asd'),
+	(20, 'asd'),
+	(18, 'asd'),
+	(15, 'asd'),
+	(24, 'asd'),
+	(23, 'test'),
+	(21, 'test'),
+	(22, 'test'),
+	(24, 'test');
 
 -- 테이블 sns.tbl_comment 구조 내보내기
 CREATE TABLE IF NOT EXISTS `tbl_comment` (
@@ -145,7 +168,7 @@ CREATE TABLE IF NOT EXISTS `tbl_user` (
 -- 테이블 데이터 sns.tbl_user:~6 rows (대략적) 내보내기
 INSERT INTO `tbl_user` (`USERID`, `NAME`, `PWD`, `NICKNAME`, `INTRODUCE`, `SECRET`, `CDATETIME`, `PHONE`, `FILEPATH`, `FILENAME`, `FILEORGNAME`, `FILESIZE`, `FILEETC`) VALUES
 	('a', '', 'a', 'a', NULL, NULL, '2024-04-05 10:24:33', NULL, NULL, NULL, NULL, NULL, NULL),
-	('asd', '', 'asd', 'asd', NULL, NULL, '2024-04-05 10:26:09', NULL, NULL, NULL, NULL, NULL, NULL),
+	('asd', '', 'asd', '멋진놈', '나는야 멋쟁이', NULL, '2024-04-05 10:26:09', NULL, 'profileFile/', '1712642465012.png', 'redheart.png', '1360', 'png'),
 	('asdf', '', 'asd', 'asd', NULL, NULL, '2024-04-05 10:27:01', NULL, NULL, NULL, NULL, NULL, NULL),
 	('qwe', '', 'asd', 'asd', NULL, NULL, '2024-04-05 10:30:55', NULL, NULL, NULL, NULL, NULL, NULL),
 	('qwe123', 'qwe', 'qwe', 'qwe', NULL, NULL, '2024-04-05 11:20:11', NULL, NULL, NULL, NULL, NULL, NULL),

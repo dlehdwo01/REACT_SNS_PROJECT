@@ -52,6 +52,7 @@
 
 .boardFunction img {
     width: 32px;
+    cursor: pointer;
 }
 
 .boardLike {}

@@ -30,6 +30,7 @@ const Login = () => {
             });
             const jsonData = await response.json();
             if (jsonData.result == "success") {
+                sessionStorage.setItem('sessionId',jsonData.userId)
                 navigate(`/home`);
             } else {
                 setErrorText("아이디와 비밀번호를 다시 확인해주세요.")

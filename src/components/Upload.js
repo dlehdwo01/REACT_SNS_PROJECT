@@ -17,13 +17,17 @@ const Upload = (props) => {
     const [fileList, setFileList] = useState([]);
     const [filePreviewList, setFilePreviewList] = useState([]);
     const [fileNo, setFileNo] = useState(0);
+    // console.log(props.user);
 
 
     const [user, setUser] = useState({
-        id: "test",
-        profileImg: "",
+        ...props.user,
         boardContents: ""
     });
+    useEffect(() => {
+        console.log(user);
+    }, [user])
+
     const [order, setOrder] = useState(1);
     const navigate = useNavigate();
     const [fileInfo, setFileInfo] = useState({});
@@ -148,8 +152,8 @@ const Upload = (props) => {
                             </div>
                             <div>
                                 <div className='d-flex boardAddProfile'>
-                                    <div className='profileImgSmall'></div>
-                                    <div>이르으음</div>
+                                    <div className='profileImgSmall'><img src={props.profilePath}></img></div>
+                                    <div>{user.NICKNAME}</div>
                                 </div>
                                 <textarea className='textBox ' placeholder='내용을 적어주세요' onChange={(e) => {
                                     setUser({ ...user, boardContents: e.target.value });

@@ -21,6 +21,33 @@ import './Menu.css';
 import { useSelector } from 'react-redux';
 
 const Menu = () => {
+    const sessionId = sessionStorage.getItem('sessionId')
+    // console.log(sessionId);
+    const [user, setUser] = useState({});
+    const [profilePath, setProfilePath] = useState("");
+    // console.log(sessionId);
+    useEffect(() => {
+        const userInfo = async () => {
+            try {
+                const response = await fetch(`http://localhost:4000/getUser.dox`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id: sessionId })
+                });
+                const jsonData = await response.json();
+                setUser(jsonData);
+                setProfilePath(`http://localhost:4000/${jsonData.FILEPATH}${jsonData.FILENAME}`)
+                // console.log(`http://localhost:4000/${jsonData.FILEPATH}${jsonData.FILENAME}`);
+                // console.log(jsonData);
+            } catch (error) {
+                console.error("에러!");
+            }
+        }
+        userInfo();
+    }, [])
+
 
     // 만들기
     const [addFlg, setAddFlg] = useState(false);
@@ -102,9 +129,10 @@ const Menu = () => {
 
 
                 <div onClick={() => {
-                    navigate(`/home/test`);
+                    navigate(`/home/${sessionId}`);
                 }}>
-                    <img className='profileImg' ></img>
+                    {user.FILEPATH && <img className='profileImg' src={profilePath}></img>}
+                    {!user.FILEPATH && <img className='profileImg'></img>}
                     프로필</div>
 
 
@@ -126,7 +154,7 @@ const Menu = () => {
             </div>}
 
             {/* 만들기 클릭시 */}
-            {addFlg && <Upload onCancel={() => {
+            {addFlg && <Upload profilePath={profilePath} user={user} onCancel={() => {
                 setAddFlg(false);
             }}></Upload>}
 

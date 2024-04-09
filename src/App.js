@@ -32,21 +32,6 @@ const reducer = (state, action) => {
 const store = createStore(reducer);
 
 const App = () => {
-  // useEffect(() => {
-  //   const sessionCheck = async () => {
-  //     try {
-  //       const response = await fetch(`http://localhost:4000/sessionCheck.dox`);
-  //       const jsonData = await response.json();
-  //       console.log(jsonData);
-  //     } catch (error) {
-  //       console.error("에러!");
-  //     }
-  //   };
-  //   sessionCheck();
-  // },[])
-
-
-
   return (
     <Provider store={store}>
       <div id="Container">
@@ -59,7 +44,7 @@ const App = () => {
             <Route path="/home/:userId" element={<User></User>}></Route>
             <Route path="/profile" element={<Profile></Profile>}></Route>
             <Route path="/board/:boardNo" element={<BoardView></BoardView>}></Route>
-            
+
           </Routes>
         </Router>
       </div>

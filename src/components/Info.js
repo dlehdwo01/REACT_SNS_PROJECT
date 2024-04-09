@@ -4,10 +4,11 @@
 import { useEffect, useState } from 'react';
 import './Info.css';
 import ProfileUpdate from './ProfileUpdate'
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams,useNavigate } from 'react-router-dom';
 
 
-const Info = () => {
+const Info = () => {    
+    const navigate = useNavigate();
     const { userId } = useParams();
     const [user, setUser] = useState({});
     const [editFlg, setEditFlg] = useState(false);
@@ -45,7 +46,9 @@ const Info = () => {
                 for (let i = 0; i < jsonData.list.length; i++) {
                     let filePath = `http://localhost:4000/${jsonData.list[i].FILEPATH}${jsonData.list[i].FILENAME}`
                     list.push(
-                        <div className='userBoard' key={jsonData.list[i].BOARDNO}>
+                        <div className='userBoard' key={jsonData.list[i].BOARDNO} onClick={()=>{
+                            navigate(`/board/${jsonData.list[i].BOARDNO}`)
+                        }}>
                             {jsonData.list[i].FILENAME != null && <img src={filePath}></img>}
                             {jsonData.list[i].FILENAME == null && <div>{jsonData.list[i].CONTENTS}</div>}
 

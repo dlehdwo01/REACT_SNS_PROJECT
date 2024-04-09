@@ -75,7 +75,7 @@ const profileFileUpload = multer({
             cb(null, false);
         }
     }
-}).single('file');;
+}).single('file');
 
 // 프로필 수정
 app.post('/editProfile', (req, res) => {
@@ -161,7 +161,7 @@ app.post('/uploadBoardFile', (req, res) => {
         var boardNo = "";
 
         // 게시글 정보 저장
-        connection.query(`INSERT INTO TBL_BOARD VALUES(null, ?, ?, now())`, [map.id, map.boardContents], (error, results) => {
+        connection.query(`INSERT INTO TBL_BOARD VALUES(null, ?, ?, now())`, [map.USERID, map.boardContents], (error, results) => {
             if (error) {
                 console.error('Error saving board info to database:', error);
                 return res.status(500).json({ error: 'Internal server error' });
@@ -265,7 +265,7 @@ app.post('/login.dox', function (req, res) {
             req.session.userId = results[0].USERID
             req.session.save();
             console.log(req.session);
-            res.send({ result: "success" })
+            res.send({ result: "success", userId: results[0].USERID })
         }
     });
 })
@@ -321,7 +321,8 @@ app.post('/boardFiles.dox', function (req, res) {
 app.post('/getBoardList.dox', function (req, res) {
     const map = req.body;
     console.log(map);
-    connection.query("SELECT *,DATE_FORMAT(B.CDATETIME,'%y년 %m월 %d일 %h시%i분') AS DATEFORM  FROM tbl_board B INNER JOIN tbl_user U ON B.USERID = U.USERID ORDER BY B.CDATETIME DESC LIMIT ?,10", [map.page * 10], function (error, results, fields) {
+
+    connection.query("SELECT B.*,U.*,IFNULL(LIKECNT,0) AS LIKECNT,DATE_FORMAT(B.CDATETIME,'%y년 %m월 %d일 %h시%i분') AS DATEFORM  FROM tbl_board B INNER JOIN tbl_user U ON B.USERID = U.USERID LEFT JOIN (SELECT BOARDNO,COUNT(*) AS LIKECNT FROM tbl_board_like GROUP BY BOARDNO) T ON B.BOARDNO=T.BOARDNO ORDER BY B.CDATETIME DESC LIMIT ?,10", [map.page * 10], function (error, results, fields) {
         if (error) {
             console.error('Error inserting user into database: ' + error.stack);
             res.status(500).send('Error inserting user into database');
@@ -347,6 +348,64 @@ app.post('/getBoardFileList.dox', function (req, res) {
     });
 })
 
+// 좋아요 누를시
+app.post('/setHeart.dox', function (req, res) {
+    const map = req.body;
+    connection.query("SELECT * FROM TBL_BOARD_LIKE WHERE BOARDNO=? AND USERID=?", [map.boardNo, map.userId], function (error, results, fields) {
+        if (error) {
+            console.error('Error inserting user into database: ' + error.stack);
+            res.status(500).send('Error inserting user into database');
+            throw error;
+        };
+        if (results.length == 0) {
+            connection.query("INSERT INTO TBL_BOARD_LIKE VALUES(?,?)", [map.boardNo, map.userId], function (error, results, fields) {
+                if (error) {
+                    console.error('Error inserting user into database: ' + error.stack);
+                    res.status(500).send('Error inserting user into database');
+                    throw error;
+                };
+                res.send({ result: 'addHeart' });
+            });
+        } else {
+            connection.query("DELETE FROM TBL_BOARD_LIKE WHERE BOARDNO=? AND USERID=?", [map.boardNo, map.userId], function (error, results, fields) {
+                if (error) {
+                    console.error('Error inserting user into database: ' + error.stack);
+                    res.status(500).send('Error inserting user into database');
+                    throw error;
+                };
+                res.send({ result: 'deleteHeart' });
+            });
+        }
+    });
+})
+
+// 해당 유저가 누른 좋아요
+app.post('/getHeart.dox', function (req, res) {
+    const map = req.body;
+    console.log(map);
+    connection.query("SELECT BOARDNO FROM TBL_BOARD_LIKE WHERE USERID=?", [map.userId], function (error, results, fields) {
+        if (error) {
+            console.error('Error inserting user into database: ' + error.stack);
+            res.status(500).send('Error inserting user into database');
+            throw error;
+        };
+        res.send(results);
+    });
+})
+
+// 해당 게 누른 좋아요
+app.post('/getHeart.dox', function (req, res) {
+    const map = req.body;
+    console.log(map);
+    connection.query("SELECT BOARDNO FROM TBL_BOARD_LIKE WHERE USERID=?", [map.userId], function (error, results, fields) {
+        if (error) {
+            console.error('Error inserting user into database: ' + error.stack);
+            res.status(500).send('Error inserting user into database');
+            throw error;
+        };
+        res.send(results);
+    });
+})
 
 app.get('/sessionCheck.dox', function (req, res) {
     var map = req.query;
