@@ -1,19 +1,27 @@
 // icons ~
-
+import whiteheart from './icons/whiteheart.png'
+import commentIcon from './icons/commentIcon.png'
 // ~ icons
 import { useEffect, useState } from 'react';
 import './Info.css';
 import ProfileUpdate from './ProfileUpdate'
-import { Link, useParams,useNavigate } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 
 
-const Info = () => {    
+const Info = () => {
     const navigate = useNavigate();
+    const sessionId = sessionStorage.getItem('sessionId');
+
     const { userId } = useParams();
-    const [user, setUser] = useState({});
-    const [editFlg, setEditFlg] = useState(false);
+    console.log(userId);
+    const [user, setUser] = useState({}); //유저정보
+    const [userCnt, setUserCnt] = useState({});
+    const [editFlg, setEditFlg] = useState(false); //프로필 수정
     const [filePath, setFilePath] = useState("");
     const [boardList, setBoardList] = useState([]);
+    const [followingFlg, setFollowingFlg] = useState(false);
+
+    // 첫 화면 렌더링시
     useEffect(() => {
         const getUser = async () => {
             try {
@@ -41,12 +49,13 @@ const Info = () => {
                     body: JSON.stringify({ id: userId })
                 });
                 const jsonData = await response.json();
+
                 let list = [];
 
                 for (let i = 0; i < jsonData.list.length; i++) {
                     let filePath = `http://localhost:4000/${jsonData.list[i].FILEPATH}${jsonData.list[i].FILENAME}`
                     list.push(
-                        <div className='userBoard' key={jsonData.list[i].BOARDNO} onClick={()=>{
+                        <div className='userBoard' key={jsonData.list[i].BOARDNO} onClick={() => {
                             navigate(`/board/${jsonData.list[i].BOARDNO}`)
                         }}>
                             {jsonData.list[i].FILENAME != null && <img src={filePath}></img>}
@@ -54,8 +63,8 @@ const Info = () => {
 
                             <div className='userBoardInfo'>
                                 <div className='userBoardTextBox'>
-                                    <div className='userBoardText'>하트 11111</div>
-                                    <div className='userBoardText'>댓글 11111</div>
+                                    <div className='userBoardText'><img src={whiteheart}></img> {jsonData.list[i].LIKECNT}</div>
+                                    <div className='userBoardText'><img src={commentIcon}></img> {jsonData.list[i].COMMENTCNT}</div>
                                 </div>
 
                             </div>
@@ -63,21 +72,75 @@ const Info = () => {
                     )
                 }
                 setBoardList(list);
-                console.log(jsonData);
             } catch (error) {
                 console.error("에러!");
             }
         };
         getUserBoardList();
+        followingCheck();
+        getUserCnt();
     }, [])
     useEffect(() => {
         // console.log(user)
         setFilePath(`http://localhost:4000/${user.FILEPATH}${user.FILENAME}`);
     }, [user])
 
+    // 해당 유저와 팔로우 여부
+    const followingCheck = async (type) => {
+        try {
+            const response = await fetch(`http://localhost:4000/followingCheck.dox`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ sessionId: sessionId, targetId: userId })
+            });
+            const jsonData = await response.json();
+            setFollowingFlg(jsonData.result);
+
+        } catch (error) {
+            console.error("에러!");
+        }
+    };
+
+    const getUserCnt = async () => {
+        try {
+            const response = await fetch(`http://localhost:4000/userCnt.dox`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ userId: userId })
+            });
+            const jsonData = await response.json();
+            setUserCnt(jsonData);
+        } catch (error) {
+            console.error("에러!");
+        }
+
+    }
+
+    // 해당 유저와의 관계 설정
+    const following = async (type) => {
+        try {
+            const response = await fetch(`http://localhost:4000/following.dox`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ sessionId: sessionId, targetId: userId, type: type })
+            });
+            const jsonData = await response.json();
+            followingCheck();
+            getUserCnt();
+
+        } catch (error) {
+            console.error("에러!");
+        }
+    };
+
 
     return (
-
         <div className='userProfileContainer'>
             <div className='userProfileTop'>
                 <div className='userProfileImg'>
@@ -86,16 +149,20 @@ const Info = () => {
                 <div className='userProfile'>
                     <div className='userInfo'>
                         <div className='userNickName'>{user.NICKNAME}</div>
-                        <button>팔로잉</button>
-                        <button>친구추가</button>
-                        <button onClick={() => {
+                        {sessionId != userId && !followingFlg && <button onClick={() => {
+                            following("FOLLOW");
+                        }}>팔로잉</button>}
+                        {sessionId != userId && followingFlg && <button onClick={() => {
+                            following("FOLLOW");
+                        }}>팔로잉 취소</button>}
+                        {sessionId == userId && <button onClick={() => {
                             setEditFlg(true);
-                        }}>프로필 수정</button>
+                        }}>프로필 수정</button>}
                     </div>
                     <div className='userHistory'>
-                        <div>게시물 <span>7</span></div>
-                        <div>팔로워 <span>7</span></div>
-                        <div>팔로우 <span>7</span></div>
+                        <div>게시물 <span>{userCnt.BOARDCNT}</span></div>
+                        <div>팔로워 <span>{userCnt.FOLLOWERCNT}</span></div>
+                        <div>팔로우 <span>{userCnt.FOLLOWINGCNT}</span></div>
                     </div>
                     <div style={{ fontWeight: 'bold' }}>{user.NAME}</div>
                     <div className='userIntroduce'>{user.INTRODUCE}</div>
@@ -103,9 +170,13 @@ const Info = () => {
             </div>
 
 
-            <div className='userBoardList'>
+            {boardList.length != 0 && <div className='userBoardList'>
                 {boardList}
-            </div>
+            </div>}
+            {boardList.length == 0 &&
+                <div style={{margin:'20px auto'}}>등록된 게시물이 없습니다</div>
+            }
+
             {editFlg && <ProfileUpdate user={user} onCancel={() => {
                 setEditFlg(false);
             }}></ProfileUpdate>}

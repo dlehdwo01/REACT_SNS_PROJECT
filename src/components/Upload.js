@@ -15,6 +15,7 @@ import { useSelector } from 'react-redux';
 
 const Upload = (props) => {
     const [fileList, setFileList] = useState([]);
+
     const [filePreviewList, setFilePreviewList] = useState([]);
     const [fileNo, setFileNo] = useState(0);
     // console.log(props.user);
@@ -24,9 +25,7 @@ const Upload = (props) => {
         ...props.user,
         boardContents: ""
     });
-    useEffect(() => {
-        console.log(user);
-    }, [user])
+
 
     const [order, setOrder] = useState(1);
     const navigate = useNavigate();
@@ -84,11 +83,6 @@ const Upload = (props) => {
             }} />])
     };
 
-    useEffect(() => {
-        console.log(filePreviewList);
-        console.log(fileList);
-    }, [fileList])
-
     // 게시글 등록
     const fnUpload = async () => {
         const formData = new FormData();
@@ -107,6 +101,9 @@ const Upload = (props) => {
             });
             const data = await response.json();
             console.log(data); // 서버에서 받은 응답 확인
+            if (data.result == "success") {
+                window.location.reload();
+            }
         } catch (error) {
             console.error('Error uploading file:', error);
         }
@@ -122,6 +119,7 @@ const Upload = (props) => {
 
     const fnDelete = () => {
         removeItemAtIndex(fileNo);
+        setOrder(1);
     };
 
     return (
@@ -150,7 +148,7 @@ const Upload = (props) => {
                             <div className='addBoardImg border'>
                                 <img src={filePreview}></img>
                             </div>
-                            <div>
+                            <div className='borderContents'>
                                 <div className='d-flex boardAddProfile'>
                                     <div className='profileImgSmall'><img src={props.profilePath}></img></div>
                                     <div>{user.NICKNAME}</div>
@@ -158,11 +156,17 @@ const Upload = (props) => {
                                 <textarea className='textBox ' placeholder='내용을 적어주세요' onChange={(e) => {
                                     setUser({ ...user, boardContents: e.target.value });
                                 }}></textarea>
-                                <div><button onClick={fnUpload}>완료</button></div>
-                                <div><button onClick={fnDelete}>삭제</button></div>
+                                <div className='btnSort'>
+                                    <button className='completeBtn' onClick={fnUpload}>완료</button>
+                                    <button className='completeBtn' onClick={() => { setOrder(1) }}>사진 추가</button>
+                                    <button style={{ backgroundColor: 'rgba(255, 0, 0, 0.5)',color:'white' }} className='completeBtn' onClick={() => {
+                                        fnDelete(fileNo);
+                                    }}>현재 사진 삭제</button>
+
+                                </div>
                             </div>
                         </div>
-                        <div className='d-flex gap-10'>
+                        <div className='d-flex gap-10 previewImg'>
                             {filePreviewList.map((preview, index) => (
                                 <div key={index} onClick={() => {
                                     setFileNo(index);
@@ -177,7 +181,8 @@ const Upload = (props) => {
                 {order == 1 &&
                     <div className='sort-column gap-10'>
                         <div className='modalTitle'>
-                            <div className='fs-5 fw-bold d-flex justify-content-center align-items-center h-100' >
+                            {fileList.length != 0 && <span className='float-end d-absolute' onClick={() => { setOrder(2) }} style={{ cursor: 'pointer', transform: 'rotate(180deg)' }}><img src={left} className='prev-btn'></img></span>}
+                            <div className='fs-5 fw-bold d-flex justify-content-center align-items-center h-100' style={{ width: '87%' }}>
                                 사진 등록
                             </div>
                         </div>

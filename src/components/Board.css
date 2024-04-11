@@ -4,6 +4,10 @@
     padding-top: 50px;
 }
 
+.commentBox {
+    width: 100%;
+}
+
 .boardSort {
     display: flex;
     flex-direction: column;
@@ -13,6 +17,7 @@
 
 .board {
     width: 60%;
+    max-width: 600px;
     padding: 10px;
     padding-bottom: 20px;
     display: flex;
@@ -26,23 +31,53 @@
     align-items: center;
     gap: 10px;
 }
+.profileConta{
+    align-items: baseline;
+    height: 100%;
+}
+.profileImg{
+    width: 40px;
+    height: 40px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    object-fit: scale-down;
+}
 
 .user>img {
     width: 40px;
     height: 40px;
     border: 1px solid #ccc;
     border-radius: 50%;
+    object-fit: scale-down;
+}
+
+.linkNickName>img {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    object-fit: scale-down;
 }
 
 .boardImg {
     width: 100%;
-    max-width: 500px;
     min-width: 200px;
     aspect-ratio: 1 / 1;
     border: 1px solid #ccc;
     border-radius: 3px;
     display: flex;
-    
+    cursor: pointer;
+}
+
+.linkNickName {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.linkNickName:hover {
+    text-decoration: underline;
 }
 
 .boardFunction {
@@ -55,11 +90,122 @@
     cursor: pointer;
 }
 
-.boardLike {}
+.boardLike {
+    font-weight: bold;
+}
+
+.boardModalBg {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100vw;
+    height: 100vh;
+    background-color: #cccccc71;
+    z-index: 2;
+}
+
+.boardModalSection {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60vw;
+    height: 80vh;
+    background-color: white;
+    overflow: hidden;
+    border-radius: 10px;
+    z-index: 3;
+}
+
+.exitBtn {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    cursor: pointer;
+  }
+
+.boardModalImg {
+    width: 100%;
+    height: 100%;
+    display: flex;
+
+
+}
+
+.boardModalLeft {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    height: 100%;
+}
+
+.boardModalRight {
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid #ccc;
+}
+
+.boardModalContents {
+    padding: 15px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.boardModalContentsCommentWrite{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding-top: 10px;
+}
+
+.commentList {
+    flex:1;
+    
+
+}
+
+.boardModalContentsCommentWrite>button{
+    padding: 10px 15px;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+.boardModalContentsCommentWrite>textarea {
+    width: 80%;
+    border: none;
+    resize: none;
+}
+.boardModalContentsCommentWrite>textarea:focus{
+    outline: none;
+}
+
+.boardModalContentsText {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.boardModalContentsComment {
+    padding-top: 10px;
+    flex: 1;
+    border-bottom: 1px solid #ccc;
+    overflow-y: scroll;
+}
+
+.moreText {
+    color: dimgray;
+    cursor: pointer;
+}
 
 .boardContents {
     display: flex;
     gap: 20px;
+}
+
+.swiper-pagination-bullet-active {
+    --swiper-pagination-color: #222222
 }
 
 .boardContents>div {
@@ -73,11 +219,24 @@
 .contentsUser {
     min-width: 120px;
     max-width: 120px;
+    font-weight: bold;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+    --swiper-navigation-color: #222222;
+    --swiper-theme-color: #222222;
+    background-color: #cccccc8f;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+
 
 }
 
-.contents {
-    min-width: 300px;
-    max-width: 300px;
+.swiper-button-prev:after,
+.swiper-button-next:after {
+    --swiper-navigation-size: 15px;
+    font-weight: bold;
 
 }

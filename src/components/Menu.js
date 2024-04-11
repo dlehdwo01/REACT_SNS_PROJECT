@@ -28,6 +28,9 @@ const Menu = () => {
     // console.log(sessionId);
     useEffect(() => {
         const userInfo = async () => {
+            if (sessionId == null) {
+                return;
+            }
             try {
                 const response = await fetch(`http://localhost:4000/getUser.dox`, {
                     method: 'POST',
@@ -39,8 +42,7 @@ const Menu = () => {
                 const jsonData = await response.json();
                 setUser(jsonData);
                 setProfilePath(`http://localhost:4000/${jsonData.FILEPATH}${jsonData.FILENAME}`)
-                // console.log(`http://localhost:4000/${jsonData.FILEPATH}${jsonData.FILENAME}`);
-                // console.log(jsonData);
+
             } catch (error) {
                 console.error("에러!");
             }
@@ -94,13 +96,13 @@ const Menu = () => {
                         setAlertFlg(false);
                     }}></img>}
                     {!(searchFlg || alertFlg) && <img className='logoImg' src={logo} onClick={() => {
-                        navigate('/home');
+                        window.location.href = "/home";
                     }}></img>}
                 </div>
 
 
                 <div onClick={() => {
-                    navigate('/home');
+                    window.location.href = "/home";
                 }}>
                     <img className='menuImg' src={home}></img>
                     홈</div>
@@ -113,27 +115,28 @@ const Menu = () => {
                     검색</div>
 
 
-                <div style={{ position: "relative" }} onClick={() => {
+                {sessionId != null && <div style={{ position: "relative" }} onClick={() => {
                     menuClick(setAlertFlg);
                 }}>
                     <div className='alertPoint'></div>
                     <img className='menuImg' src={heart}></img>
-                    알림</div>
+                    알림</div>}
 
 
-                <div onClick={() => {
+                {sessionId != null && <div onClick={() => {
                     setAddFlg(true);
+                    document.body.style.overflow = 'hidden';
                 }}>
                     <img className='menuImg' src={plus}></img>
-                    만들기</div>
+                    만들기</div>}
 
 
-                <div onClick={() => {
-                    navigate(`/home/${sessionId}`);
+                {sessionId != null && <div onClick={() => {
+                    window.location.href = `/home/${sessionId}`;
                 }}>
                     {user.FILEPATH && <img className='profileImg' src={profilePath}></img>}
                     {!user.FILEPATH && <img className='profileImg'></img>}
-                    프로필</div>
+                    프로필</div>}
 
 
             </div>
@@ -156,6 +159,7 @@ const Menu = () => {
             {/* 만들기 클릭시 */}
             {addFlg && <Upload profilePath={profilePath} user={user} onCancel={() => {
                 setAddFlg(false);
+                document.body.style.overflow = 'auto';
             }}></Upload>}
 
             {/* 더보기 클릭시 */}

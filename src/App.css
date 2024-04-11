@@ -1,7 +1,7 @@
 .homeCont {
 
     margin-left: 251px;
-    width: calc(100vw - 251px);
+    /* width: calc(100vw - 251px); */
 }
 
 .loginCont {

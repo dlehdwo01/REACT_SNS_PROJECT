@@ -126,9 +126,9 @@ const ProfileUpdate = (props) => {
                                 }}></input>}
 
                                 {!nickNameFlg && <span>{user.NICKNAME}</span>}
-                                <img src={pencil} style={{ width: '12px', cursor: 'pointer', marginLeft: '3px' }} onClick={() => { setNickNameFlg(true); }}></img>
-
+                                <img src={pencil} style={{ width: '12px', cursor: 'pointer', marginLeft: '3px' }} onClick={() => { setNickNameFlg(!nickNameFlg); }}></img>
                             </div>
+                            
 
                             <div>
                                 <textarea className='introduceInputText borderGray' placeholder='당신을 소개해보세요' onChange={(e) => {
@@ -136,8 +136,8 @@ const ProfileUpdate = (props) => {
 
                                 }} value={user.INTRODUCE}></textarea>
                             </div>
-                            <div>
-                                <button onClick={fnUpload}>완료</button>
+                            <div style={{marginBottom:'10px'}}>
+                                <button onClick={fnUpload} className='completeBtn'>완료</button>
                             </div>
 
                         </div>
