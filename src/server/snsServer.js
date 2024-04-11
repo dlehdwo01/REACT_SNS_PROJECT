@@ -195,10 +195,10 @@ app.post('/uploadBoardFile', (req, res) => {
             // 모든 파일 정보 저장이 완료되면 응답 전송
             Promise.all(fileInsertPromises)
                 .then(() => {
-                    return res.json({ message: 'File uploaded successfully' });
+                    return res.json({ message: 'File uploaded successfully', result: 'success' });
                 })
                 .catch((error) => {
-                    return res.status(500).json({ error: 'Internal server error' });
+                    return res.status(500).json({ error: 'Internal server error', result: 'failed' });
                 });
         });
     });
@@ -208,8 +208,10 @@ app.post('/uploadBoardFile', (req, res) => {
 // 해당 유저 게시글 목록 불러오기
 app.post('/getUserBoardList.dox', function (req, res) {
     var map = req.body;
-    console.log(map);
-    connection.query("SELECT b.*,FILEPATH,FILENAME FROM tbl_board b left JOIN tbl_board_file f ON b.BOARDNO=f.BOARDNO WHERE userid=? GROUP BY b.boardno", [map.id], function (error, results, fields) {
+    const query = `SELECT ifnull(COMMENTCNT,0) AS COMMENTCNT,ifnull(t.LIKECNT,0) as LIKECNT,b.*,FILEPATH,FILENAME FROM tbl_board b LEFT JOIN (SELECT boardno,COUNT(*) AS LIKECNT FROM tbl_board_like GROUP BY boardno) t ON b.boardno=t.boardno left JOIN (SELECT * FROM tbl_board_file GROUP BY boardno) f ON b.BOARDNO=f.BOARDNO 
+    LEFT JOIN (SELECT boardno,COUNT(*) AS COMMENTCNT FROM tbl_comment GROUP BY boardno) c ON b.boardno=c.boardno
+    WHERE userid=? GROUP BY b.boardno ORDER BY cdatetime DESC`;
+    connection.query(query, [map.id], function (error, results, fields) {
         if (error) {
             console.error('Error inserting user into database: ' + error.stack);
             res.status(500).send('Error inserting user into database');
@@ -290,7 +292,7 @@ app.post('/getUser.dox', function (req, res) {
 // 해당 게시글 불러오기
 app.post('/boardInfo.dox', function (req, res) {
     var map = req.body;
-    const query = "SELECT *,DATE_FORMAT(b.cdatetime,'%y년 %m월 %d일') AS DATETIME FROM tbl_board b INNER JOIN tbl_user u ON b.USERID=u.USERID WHERE BOARDNO=?"
+    const query = "SELECT CASE WHEN TIMESTAMPDIFF(MINUTE, b.CDATETIME, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, b.CDATETIME, NOW()), '분') WHEN TIMESTAMPDIFF(HOUR, b.CDATETIME, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, b.CDATETIME, NOW()), '시간') WHEN TIMESTAMPDIFF(DAY, b.CDATETIME, NOW()) < 30 THEN CONCAT(TIMESTAMPDIFF(DAY, b.CDATETIME, NOW()), '일') ELSE CONCAT(TIMESTAMPDIFF(MONTH, b.CDATETIME, NOW()), '달') END AS 'TIMESTAMP', b.*,DATE_FORMAT(b.cdatetime,'%y년 %m월 %d일') AS DATETIME,u.*,t.LIKECNT FROM tbl_board b INNER JOIN tbl_user u ON b.USERID=u.USERID LEFT JOIN (SELECT BOARDNO,COUNT(*) AS LIKECNT FROM tbl_board_like GROUP BY BOARDNO) t ON b.BOARDNO=t.BOARDNO WHERE B.BOARDNO=?"
     connection.query(query, [map.boardNo], function (error, results, fields) {
         if (error) {
             console.error('Error inserting user into database: ' + error.stack);
@@ -298,7 +300,7 @@ app.post('/boardInfo.dox', function (req, res) {
             throw error;
         };
         res.send(results[0]);
-        console.log(results);
+        // console.log(results);
 
     });
 })
@@ -322,7 +324,7 @@ app.post('/getBoardList.dox', function (req, res) {
     const map = req.body;
     console.log(map);
 
-    connection.query("SELECT B.*,U.*,IFNULL(LIKECNT,0) AS LIKECNT,DATE_FORMAT(B.CDATETIME,'%y년 %m월 %d일 %h시%i분') AS DATEFORM  FROM tbl_board B INNER JOIN tbl_user U ON B.USERID = U.USERID LEFT JOIN (SELECT BOARDNO,COUNT(*) AS LIKECNT FROM tbl_board_like GROUP BY BOARDNO) T ON B.BOARDNO=T.BOARDNO ORDER BY B.CDATETIME DESC LIMIT ?,10", [map.page * 10], function (error, results, fields) {
+    connection.query("SELECT B.BOARDNO FROM tbl_board B INNER JOIN tbl_user U ON B.USERID = U.USERID LEFT JOIN (SELECT BOARDNO,COUNT(*) AS LIKECNT FROM tbl_board_like GROUP BY BOARDNO) T ON B.BOARDNO=T.BOARDNO ORDER BY B.CDATETIME DESC LIMIT ?,10", [map.page * 10], function (error, results, fields) {
         if (error) {
             console.error('Error inserting user into database: ' + error.stack);
             res.status(500).send('Error inserting user into database');
@@ -382,7 +384,7 @@ app.post('/setHeart.dox', function (req, res) {
 // 해당 유저가 누른 좋아요
 app.post('/getHeart.dox', function (req, res) {
     const map = req.body;
-    console.log(map);
+    // console.log(map);
     connection.query("SELECT BOARDNO FROM TBL_BOARD_LIKE WHERE USERID=?", [map.userId], function (error, results, fields) {
         if (error) {
             console.error('Error inserting user into database: ' + error.stack);
@@ -393,11 +395,137 @@ app.post('/getHeart.dox', function (req, res) {
     });
 })
 
-// 해당 게 누른 좋아요
-app.post('/getHeart.dox', function (req, res) {
+// 해당 게시물 좋아요 개수
+app.post('/getBoardHeartCnt.dox', function (req, res) {
+    const map = req.body;
+    // console.log(map);
+    connection.query("SELECT BOARDNO,COUNT(*) AS LIKECNT FROM tbl_board_like WHERE BOARDNO=? GROUP BY BOARDNO", [map.boardNo], function (error, results, fields) {
+        if (error) {
+            console.error('Error inserting user into database: ' + error.stack);
+            res.status(500).send('Error inserting user into database');
+            throw error;
+        };
+        res.send(results);
+    });
+})
+
+// 해당 게시물에 대한 나의 좋아요
+app.post('/iLikeThis.dox', function (req, res) {
+    const map = req.body;
+    // console.log(map);
+    connection.query("SELECT * FROM tbl_board_like WHERE boardno=? AND userid=?", [map.boardNo, map.userId], function (error, results, fields) {
+        if (error) {
+            console.error('Error inserting user into database: ' + error.stack);
+            res.status(500).send('Error inserting user into database');
+            throw error;
+        };
+
+        if (results.length == 1) {
+            res.send({ result: true })
+        } else {
+            res.send({ result: false })
+        }
+    });
+})
+
+// 해당 유저의 팔로워,팔로우,게시글수 구하기
+app.post('/userCnt.dox', function (req, res) {
     const map = req.body;
     console.log(map);
-    connection.query("SELECT BOARDNO FROM TBL_BOARD_LIKE WHERE USERID=?", [map.userId], function (error, results, fields) {
+    const query = "SELECT USERID,COUNT(*) AS BOARDCNT,(SELECT COUNT(*) FROM tbl_friend WHERE USERID=? AND STATUS='FOLLOW') AS FOLLOWERCNT,(SELECT COUNT(*) FROM tbl_friend WHERE FRIENDID=? AND STATUS='FOLLOW') AS FOLLOWINGCNT FROM tbl_board WHERE userid=?"
+    connection.query(query, [map.userId, map.userId, map.userId], function (error, results, fields) {
+        if (error) {
+            console.error('Error inserting user into database: ' + error.stack);
+            res.status(500).send('Error inserting user into database');
+            throw error;
+        };
+        res.send(results[0]);
+
+    });
+})
+
+// 해당 유저와 팔로우 여부
+app.post('/followingCheck.dox', function (req, res) {
+    const map = req.body;
+    console.log(map);
+
+    connection.query("SELECT * FROM TBL_FRIEND WHERE USERID=? AND FRIENDID=?", [map.sessionId, map.targetId], function (error, results, fields) {
+        if (error) {
+            console.error('Error inserting user into database: ' + error.stack);
+            res.status(500).send('Error inserting user into database');
+            throw error;
+        };
+        if (results.length == 1) {
+            res.send({ result: true })
+        } else {
+            res.send({ result: false })
+        }
+    });
+})
+
+// 팔로잉 설정
+app.post('/following.dox', function (req, res) {
+    const map = req.body;
+
+    connection.query("SELECT * FROM TBL_FRIEND WHERE USERID=? AND FRIENDID=? AND STATUS=?", [map.sessionId, map.targetId, map.type], function (error, results, fields) {
+        if (error) {
+            console.error('Error inserting user into database: ' + error.stack);
+            res.status(500).send('Error inserting user into database');
+            throw error;
+        };
+        if (results.length == 0) {
+            connection.query("INSERT INTO TBL_FRIEND VALUES(?,?,?)", [map.sessionId, map.targetId, map.type], function (error, results, fields) {
+                if (error) {
+                    console.error('Error inserting user into database: ' + error.stack);
+                    res.status(500).send('Error inserting user into database');
+                    throw error;
+                };
+                res.send({ result: 'ADD FOLLOW' })
+            });
+
+        } else {
+            connection.query("DELETE FROM TBL_FRIEND WHERE USERID=? AND FRIENDID=? AND STATUS=?", [map.sessionId, map.targetId, map.type], function (error, results, fields) {
+                if (error) {
+                    console.error('Error inserting user into database: ' + error.stack);
+                    res.status(500).send('Error inserting user into database');
+                    throw error;
+                };
+                res.send({ result: 'REMOVE FOLLOW' })
+            });
+        }
+    });
+})
+
+// 코멘트 등록
+app.post('/addComment.dox', function (req, res) {
+    const map = req.body;
+    console.log(map);
+    const query = "INSERT INTO TBL_COMMENT VALUES ( NULL , ?, ?, ?, now())"
+    connection.query(query, [map.boardNo, map.userId, map.comment], function (error, results, fields) {
+        if (error) {
+            console.error('Error inserting user into database: ' + error.stack);
+            res.status(500).send('Error inserting user into database');
+            throw error;
+        };
+        res.send({ result: 'success' });
+    });
+})
+
+// 게시물 코멘트 가져오기
+app.post('/getComment.dox', function (req, res) {
+    const map = req.body;
+
+    const query = `SELECT *,
+    CASE 
+    WHEN TIMESTAMPDIFF(MINUTE, c.CDATETIME, NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, c.CDATETIME, NOW()), '분') 
+    WHEN TIMESTAMPDIFF(HOUR, c.CDATETIME, NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, c.CDATETIME, NOW()), '시간') 
+    WHEN TIMESTAMPDIFF(DAY, c.CDATETIME, NOW()) < 30 THEN CONCAT(TIMESTAMPDIFF(DAY, c.CDATETIME, NOW()), '일') 
+    ELSE CONCAT(TIMESTAMPDIFF(MONTH, c.CDATETIME, NOW()), '달') 
+    END AS 'TIMESTAMP' 
+    FROM tbl_comment c 
+    inner join tbl_user u ON c.USERID = u.USERID 
+    WHERE BOARDNO=?`
+    connection.query(query, [map.boardNo], function (error, results, fields) {
         if (error) {
             console.error('Error inserting user into database: ' + error.stack);
             res.status(500).send('Error inserting user into database');
