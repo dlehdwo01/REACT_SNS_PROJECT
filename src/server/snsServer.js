@@ -208,9 +208,7 @@ app.post('/uploadBoardFile', (req, res) => {
 // 해당 유저 게시글 목록 불러오기
 app.post('/getUserBoardList.dox', function (req, res) {
     var map = req.body;
-    const query = `SELECT ifnull(COMMENTCNT,0) AS COMMENTCNT,ifnull(t.LIKECNT,0) as LIKECNT,b.*,FILEPATH,FILENAME FROM tbl_board b LEFT JOIN (SELECT boardno,COUNT(*) AS LIKECNT FROM tbl_board_like GROUP BY boardno) t ON b.boardno=t.boardno left JOIN (SELECT * FROM tbl_board_file GROUP BY boardno) f ON b.BOARDNO=f.BOARDNO 
-    LEFT JOIN (SELECT boardno,COUNT(*) AS COMMENTCNT FROM tbl_comment GROUP BY boardno) c ON b.boardno=c.boardno
-    WHERE userid=? GROUP BY b.boardno ORDER BY cdatetime DESC`;
+    const query = `SELECT ifnull(COMMENTCNT,0) AS COMMENTCNT,ifnull(t.LIKECNT,0) as LIKECNT,b.*,FILEPATH,FILENAME FROM tbl_board b LEFT JOIN (SELECT boardno,COUNT(*) AS LIKECNT FROM tbl_board_like GROUP BY boardno) t ON b.boardno=t.boardno left JOIN (SELECT * FROM tbl_board_file GROUP BY boardno) f ON b.BOARDNO=f.BOARDNO LEFT JOIN (SELECT boardno,COUNT(*) AS COMMENTCNT FROM tbl_comment GROUP BY boardno) c ON b.boardno=c.boardno WHERE userid=? GROUP BY b.boardno ORDER BY cdatetime DESC`;
     connection.query(query, [map.id], function (error, results, fields) {
         if (error) {
             console.error('Error inserting user into database: ' + error.stack);
@@ -432,7 +430,7 @@ app.post('/iLikeThis.dox', function (req, res) {
 app.post('/userCnt.dox', function (req, res) {
     const map = req.body;
     console.log(map);
-    const query = "SELECT USERID,COUNT(*) AS BOARDCNT,(SELECT COUNT(*) FROM tbl_friend WHERE USERID=? AND STATUS='FOLLOW') AS FOLLOWERCNT,(SELECT COUNT(*) FROM tbl_friend WHERE FRIENDID=? AND STATUS='FOLLOW') AS FOLLOWINGCNT FROM tbl_board WHERE userid=?"
+    const query = "SELECT USERID,COUNT(*) AS BOARDCNT,(SELECT COUNT(*) FROM tbl_friend WHERE USERID=? AND STATUS='FOLLOW') AS FOLLOWINGCNT,(SELECT COUNT(*) FROM tbl_friend WHERE FRIENDID=? AND STATUS='FOLLOW') AS FOLLOWERCNT FROM tbl_board WHERE userid=?"
     connection.query(query, [map.userId, map.userId, map.userId], function (error, results, fields) {
         if (error) {
             console.error('Error inserting user into database: ' + error.stack);
@@ -441,6 +439,62 @@ app.post('/userCnt.dox', function (req, res) {
         };
         res.send(results[0]);
 
+    });
+})
+
+// 해당 유저의 팔로워 가져오기
+app.post('/getFollowerList.dox', function (req, res) {
+    const map = req.body;
+    const query = "SELECT * FROM tbl_friend F INNER JOIN tbl_user U ON F.USERID=U.USERID WHERE FRIENDID=? AND STATUS='FOLLOW'"
+    connection.query(query, [map.userId], function (error, results, fields) {
+        if (error) {
+            console.error('Error inserting user into database: ' + error.stack);
+            res.status(500).send('Error inserting user into database');
+            throw error;
+        };
+        res.send(results);
+    });
+})
+
+// 해당 유저의 팔로잉 가져오기
+app.post('/getFollowingList.dox', function (req, res) {
+    const map = req.body;
+    const query = "SELECT * FROM tbl_friend F INNER JOIN tbl_user U ON F.FRIENDID=U.USERID WHERE F.USERID=? AND STATUS='FOLLOW'"
+    connection.query(query, [map.userId], function (error, results, fields) {
+        if (error) {
+            console.error('Error inserting user into database: ' + error.stack);
+            res.status(500).send('Error inserting user into database');
+            throw error;
+        };
+        res.send(results);
+    });
+})
+
+// 팔로워 삭제하기
+app.post('/removeFollower.dox', function (req, res) {
+    const map = req.body;
+    const query = "DELETE FROM tbl_friend WHERE USERID=? AND FRIENDID=? AND STATUS='FOLLOW'"
+    connection.query(query, [map.followerId, map.sessionId], function (error, results, fields) {
+        if (error) {
+            console.error('Error inserting user into database: ' + error.stack);
+            res.status(500).send('Error inserting user into database');
+            throw error;
+        };
+        res.send({ result: 'success' });
+    });
+})
+
+// 팔로잉 삭제하기
+app.post('/removeFollowing.dox', function (req, res) {
+    const map = req.body;
+    const query = "DELETE FROM tbl_friend WHERE USERID=? AND FRIENDID=? AND STATUS='FOLLOW'"
+    connection.query(query, [map.sessionId, map.followingId], function (error, results, fields) {
+        if (error) {
+            console.error('Error inserting user into database: ' + error.stack);
+            res.status(500).send('Error inserting user into database');
+            throw error;
+        };
+        res.send({ result: 'success' });
     });
 })
 
