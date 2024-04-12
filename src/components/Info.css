@@ -152,3 +152,71 @@
     height: 100%;
     object-fit: scale-down;
 }
+
+.userModalBg {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100vw;
+    height: 100vh;
+    background-color: #cccccc71;
+    z-index: 2;
+}
+
+.userModalSection {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20vw;
+    min-width: 400px;
+    height: 60vh;
+    background-color: white;
+    overflow: hidden;
+    border-radius: 10px;
+    z-index: 3;
+}
+
+.userFollowerTitle {
+    text-align: center;
+    padding: 10px;
+    font-weight: bold;
+    border-bottom: 1px solid #ccc;
+}
+
+.userFollwerProfileImg {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    object-fit: scale-down;
+}
+
+.followBtn {
+    border: none;
+    border-radius: 7px;
+    padding: 5px 20px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #222222;
+    background-color: #cccccc6e;
+}
+.followSearch{
+    padding: 5px 10px;
+    width: 90%;
+    margin: 5px;
+    border: none;
+    border-radius: 10px;
+    font-size: 13px;
+    background-color: #cccccc6e;    
+}
+.followSearch:focus{
+    outline: none;
+}
+.followList{
+    flex: 1 1;
+    flex-basis : 0;
+    overflow-y: auto;
+    padding: 10px;
+    
+}

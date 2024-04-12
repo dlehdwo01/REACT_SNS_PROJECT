@@ -6,24 +6,20 @@ import comment from './icons/comment.png';
 import { useInView } from 'react-intersection-observer'
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-
-import 'swiper/css';
-import 'swiper/css/bundle';
 import './Board.css';
-import BoardDetail from './BoardDetail.js'
-
+import 'swiper/css';
 
 const BoardListOne = (props) => {
     const sessionId = sessionStorage.getItem('sessionId');
+    const { boardNo } = useParams();
     const [board, setBoard] = useState({});
     const [boardFile, setBoardFile] = useState([]);
     const [boardImgView, setBoardImgView] = useState([]);
     const [likeCnt, setLikeCnt] = useState("");
     const [likeThis, setLikeThis] = useState();
     const [moreContents, setMoreContents] = useState(false); // 더보기
-    const [boardDetailFlg, setBoardDetailFlg] = useState(false);
 
     // 첫 렌더링시
     useEffect(() => {
@@ -35,7 +31,7 @@ const BoardListOne = (props) => {
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ boardNo: props.boardNo })
+                    body: JSON.stringify({ boardNo: boardNo })
                 });
                 const jsonData = await response.json();
                 // console.log(jsonData);
@@ -52,7 +48,7 @@ const BoardListOne = (props) => {
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ boardNo: props.boardNo })
+                    body: JSON.stringify({ boardNo: boardNo })
                 });
                 const jsonData = await response.json();
                 setBoardFile(jsonData);
@@ -70,10 +66,7 @@ const BoardListOne = (props) => {
         let list = [];
         for (let i = 0; i < boardFile.length; i++) {
             list.push(
-                <SwiperSlide key={boardFile[i].FILENO} onClick={() => {
-                    setBoardDetailFlg(true);
-                    document.body.style.overflow = 'hidden';
-                }}>
+                <SwiperSlide key={boardFile[i].FILENO}>
                     <img src={`http://localhost:4000/${boardFile[i].FILEPATH}${boardFile[i].FILENAME}`} alt="file" style={{ objectFit: 'scale-down', width: '100%', height: '100%' }}></img>
                 </SwiperSlide>
             )
@@ -90,7 +83,7 @@ const BoardListOne = (props) => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ boardNo: props.boardNo })
+                body: JSON.stringify({ boardNo: boardNo })
             });
             const jsonData = await response.json();
             iLikeThis();
@@ -112,9 +105,10 @@ const BoardListOne = (props) => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ boardNo: props.boardNo, userId: sessionId })
+                body: JSON.stringify({ boardNo: boardNo, userId: sessionId })
             });
             const jsonData = await response.json();
+
             setLikeThis(jsonData.result);
         } catch (error) {
             console.error("에러!");
@@ -124,7 +118,6 @@ const BoardListOne = (props) => {
 
     // 좋아요 누를시
     const setHeart = async () => {
-
         if (sessionId == null) {
             return;
         }
@@ -134,7 +127,7 @@ const BoardListOne = (props) => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ boardNo: props.boardNo, userId: sessionId })
+                body: JSON.stringify({ boardNo: boardNo, userId: sessionId })
             });
             const jsonData = await response.json();
             getHeartList();
@@ -146,60 +139,57 @@ const BoardListOne = (props) => {
 
 
     return (
-        <div className='board'>
+        <div className='boardCont'>
+            <div className='boardSort'>
+                <div className='board'>
+                    <div className='user'>
+                        <Link to={`/home/${board.USERID}`} className='linkNickName'>
+                            <img src={`http://localhost:4000/${board.FILEPATH}${board.FILENAME}`}></img>
 
-            <div className='user'>
-                <Link to={`/home/${board.USERID}`} className='linkNickName'>
-                    <img src={`http://localhost:4000/${board.FILEPATH}${board.FILENAME}`}></img>
+                            <div style={{ fontWeight: 'bold' }}>
+                                {board.NICKNAME}
+                            </div>
+                        </Link>
 
-                    <div style={{ fontWeight: 'bold' }}>
-                        {board.NICKNAME}
+
+                        <div style={{ color: 'dimgray' }}><span style={{ fontWeight: 'bold', color: 'dimgray' }}>· </span> {board.TIMESTAMP}</div>
                     </div>
-                </Link>
-
-
-                <div style={{ color: 'dimgray' }}><span style={{ fontWeight: 'bold', color: 'dimgray' }}>· </span> {board.TIMESTAMP}</div>
+                    <div className='boardImg'>
+                        <Swiper
+                            // install Swiper modules
+                            modules={[Navigation, Pagination, Scrollbar, A11y]}
+                            spaceBetween={10}
+                            slidesPerView={1}
+                            
+                            pagination={{ clickable: true }}
+                            scrollbar={{ draggable: true }}
+                        >
+                            {boardImgView}
+                            사진
+                        </Swiper>
+                    </div>
+                    <div className='boardFunction'>
+                        <div className='boardFunction'>
+                            {likeThis && <img src={redheart} onClick={setHeart} />}
+                            {!likeThis && <img src={heart} onClick={setHeart} />}
+                        </div>
+                    </div>
+                    <div className='boardLike'>좋아요 {likeCnt}개</div>
+                    <div className='boardContents'>
+                    <Link to={`/home/${board.USERID}`} className='linkNickName'><div className='contentsUser'>{board.NICKNAME}</div></Link>
+                        {!moreContents && <div className='contents'>{board.CONTENTS}</div>}
+                    </div>
+                    {moreContents && <div>{board.CONTENTS}</div>}
+                    <div onClick={() => {
+                        setMoreContents(!moreContents);
+                    }} >
+                        {!moreContents && <span className='moreText'>더보기</span>}
+                        {moreContents && <span className='moreText'>간략히</span>}
+                    </div>
+                    <div className='moreText'>댓글보기</div>
+                </div >
             </div>
-            <div className='boardImg'>
-                <Swiper
-                    // install Swiper modules
-                    modules={[Navigation, Pagination, Scrollbar, A11y]}
-                    spaceBetween={10}
-                    slidesPerView={1}
-                    navigation
-                    pagination={{ clickable: true }}
-                    scrollbar={{ draggable: true }}
-                >
-                    {boardImgView}
-
-                </Swiper>
-            </div>
-            <div className='boardFunction'>
-                <div className='boardFunction'>
-                    {likeThis && <img src={redheart} onClick={setHeart} />}
-                    {!likeThis && <img src={heart} onClick={setHeart} />}
-                </div>
-            </div>
-            <div className='boardLike'>좋아요 {likeCnt}개</div>
-            <div className='boardContents'>
-                <Link to={`/home/${board.USERID}`} className='linkNickName'><div className='contentsUser'>{board.NICKNAME}</div></Link>
-                {!moreContents && <div className='contents'>{board.CONTENTS}</div>}
-            </div>
-            {moreContents && <div>{board.CONTENTS}</div>}
-            <div onClick={() => {
-                setMoreContents(!moreContents);
-            }} >
-                {!moreContents && <span className='moreText'>더보기</span>}
-                {moreContents && <span className='moreText'>간략히</span>}
-            </div>
-            {/* <div><textarea className='commentBox'></textarea></div> */}
-            <div className='moreText' onClick={() => {
-                setBoardDetailFlg(true);
-            }}>댓글보기</div>
-            {boardDetailFlg && <BoardDetail board={board} boardFile={boardFile} boardNo={props.boardNo} fnExit={() => {
-                setBoardDetailFlg(false);
-            }}></BoardDetail>}
-        </div >
+        </div>
     );
 };
 export default BoardListOne;

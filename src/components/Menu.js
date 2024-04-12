@@ -41,6 +41,7 @@ const Menu = () => {
                 });
                 const jsonData = await response.json();
                 setUser(jsonData);
+                // console.log(jsonData)
                 setProfilePath(`http://localhost:4000/${jsonData.FILEPATH}${jsonData.FILENAME}`)
 
             } catch (error) {

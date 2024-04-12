@@ -4,7 +4,6 @@ import Login from './pages/Login';
 import Join from './pages/Join';
 import User from './pages/User';
 import Profile from './pages/Profile';
-import BoardView from './pages/BoardView';
 import Nav from './components/Nav';
 import Menu from './components/Menu';
 
@@ -43,7 +42,6 @@ const App = () => {
             <Route path="/home" element={<Home></Home>}></Route>
             <Route path="/home/:userId" element={<User></User>}></Route>
             <Route path="/profile" element={<Profile></Profile>}></Route>
-            <Route path="/board/:boardNo" element={<BoardView></BoardView>}></Route>
 
           </Routes>
         </Router>

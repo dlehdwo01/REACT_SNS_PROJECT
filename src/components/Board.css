@@ -31,11 +31,13 @@
     align-items: center;
     gap: 10px;
 }
-.profileConta{
+
+.profileConta {
     align-items: baseline;
     height: 100%;
 }
-.profileImg{
+
+.profileImg {
     width: 40px;
     height: 40px;
     border: 1px solid #ccc;
@@ -122,7 +124,7 @@
     right: 10px;
     top: 10px;
     cursor: pointer;
-  }
+}
 
 .boardModalImg {
     width: 100%;
@@ -153,7 +155,8 @@
     flex-direction: column;
     justify-content: space-between;
 }
-.boardModalContentsCommentWrite{
+
+.boardModalContentsCommentWrite {
     display: flex;
     gap: 10px;
     align-items: center;
@@ -161,12 +164,12 @@
 }
 
 .commentList {
-    flex:1;
-    
+    flex: 1;
+
 
 }
 
-.boardModalContentsCommentWrite>button{
+.boardModalContentsCommentWrite>button {
     padding: 10px 15px;
     border: none;
     border-radius: 10px;
@@ -178,7 +181,8 @@
     border: none;
     resize: none;
 }
-.boardModalContentsCommentWrite>textarea:focus{
+
+.boardModalContentsCommentWrite>textarea:focus {
     outline: none;
 }
 
@@ -189,7 +193,8 @@
 
 .boardModalContentsComment {
     padding-top: 10px;
-    flex: 1;
+    flex: 1 1;
+    flex-basis: 0;
     border-bottom: 1px solid #ccc;
     overflow-y: scroll;
 }
@@ -202,6 +207,34 @@
 .boardContents {
     display: flex;
     gap: 20px;
+}
+
+.boardModalMoreBg {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100vw;
+    height: 100vh;
+    background-color: #cccccc71;
+    z-index: 2;
+}
+
+.boardModalMoreSection {
+    position: absolute;
+    background-color: white;
+    top: 50%;
+    left: 50%;
+    width: 20vw;
+    transform: translate(-50%, -50%);
+    border-radius: 10px;
+}
+
+.modalSelect {
+    text-align: center;
+    color: rgb(255, 31, 31);
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    font-weight: bold;
 }
 
 .swiper-pagination-bullet-active {

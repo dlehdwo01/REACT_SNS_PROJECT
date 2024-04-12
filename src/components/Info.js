@@ -6,12 +6,16 @@ import { useEffect, useState } from 'react';
 import './Info.css';
 import ProfileUpdate from './ProfileUpdate'
 import { Link, useParams, useNavigate } from 'react-router-dom';
+import BoardDetail from './BoardDetail.js'
+import UserFolower from './UserFolower.js'
+import UserFolowing from './UserFolowing.js'
 
 
 const Info = () => {
     const navigate = useNavigate();
     const sessionId = sessionStorage.getItem('sessionId');
-
+    const [boardDetailFlg, setBoardDetailFlg] = useState(false);
+    const [detailBoardNo, setDetailBoardNo] = useState("");
     const { userId } = useParams();
     console.log(userId);
     const [user, setUser] = useState({}); //유저정보
@@ -19,7 +23,10 @@ const Info = () => {
     const [editFlg, setEditFlg] = useState(false); //프로필 수정
     const [filePath, setFilePath] = useState("");
     const [boardList, setBoardList] = useState([]);
-    const [followingFlg, setFollowingFlg] = useState(false);
+    const [followingFlg, setFollowingFlg] = useState(false); //현재팔로우여부flg
+    const [followListFlg, setFollowListFlg] = useState(false); // 팔로워flg
+    const [followingListFlg, setFollowingListFlg] = useState(false); // 팔로잉flg
+
 
     // 첫 화면 렌더링시
     useEffect(() => {
@@ -56,7 +63,9 @@ const Info = () => {
                     let filePath = `http://localhost:4000/${jsonData.list[i].FILEPATH}${jsonData.list[i].FILENAME}`
                     list.push(
                         <div className='userBoard' key={jsonData.list[i].BOARDNO} onClick={() => {
-                            navigate(`/board/${jsonData.list[i].BOARDNO}`)
+                            document.body.style.overflow = 'hidden';
+                            setDetailBoardNo(jsonData.list[i].BOARDNO);
+                            setBoardDetailFlg(true);
                         }}>
                             {jsonData.list[i].FILENAME != null && <img src={filePath}></img>}
                             {jsonData.list[i].FILENAME == null && <div>{jsonData.list[i].CONTENTS}</div>}
@@ -66,7 +75,6 @@ const Info = () => {
                                     <div className='userBoardText'><img src={whiteheart}></img> {jsonData.list[i].LIKECNT}</div>
                                     <div className='userBoardText'><img src={commentIcon}></img> {jsonData.list[i].COMMENTCNT}</div>
                                 </div>
-
                             </div>
                         </div>
                     )
@@ -117,7 +125,6 @@ const Info = () => {
         } catch (error) {
             console.error("에러!");
         }
-
     }
 
     // 해당 유저와의 관계 설정
@@ -161,8 +168,14 @@ const Info = () => {
                     </div>
                     <div className='userHistory'>
                         <div>게시물 <span>{userCnt.BOARDCNT}</span></div>
-                        <div>팔로워 <span>{userCnt.FOLLOWERCNT}</span></div>
-                        <div>팔로우 <span>{userCnt.FOLLOWINGCNT}</span></div>
+                        <div onClick={() => {
+                            setFollowListFlg(true);
+                            document.body.style.overflow = 'hidden';
+                        }} style={{ cursor: 'pointer' }}>팔로워 <span>{userCnt.FOLLOWERCNT}</span></div>
+                        <div onClick={() => {
+                            setFollowingListFlg(true);
+                            document.body.style.overflow = 'hidden';
+                        }} style={{ cursor: 'pointer' }}>팔로우 <span>{userCnt.FOLLOWINGCNT}</span></div>
                     </div>
                     <div style={{ fontWeight: 'bold' }}>{user.NAME}</div>
                     <div className='userIntroduce'>{user.INTRODUCE}</div>
@@ -174,13 +187,25 @@ const Info = () => {
                 {boardList}
             </div>}
             {boardList.length == 0 &&
-                <div style={{margin:'20px auto'}}>등록된 게시물이 없습니다</div>
+                <div style={{ margin: '20px auto' }}>등록된 게시물이 없습니다</div>
             }
 
             {editFlg && <ProfileUpdate user={user} onCancel={() => {
                 setEditFlg(false);
             }}></ProfileUpdate>}
 
+            {boardDetailFlg && <BoardDetail boardNo={detailBoardNo} fnExit={() => {
+                setBoardDetailFlg(false);
+            }}></BoardDetail>}
+            {followListFlg && <UserFolower fnExit={() => {
+                setFollowListFlg(false);
+                document.body.style.overflow = 'auto';
+            }} userId={userId}></UserFolower>}
+
+            {followingListFlg && <UserFolowing fnExit={() => {
+                setFollowingListFlg(false);
+                document.body.style.overflow = 'auto';
+            }} userId={userId}></UserFolowing>}
         </div>
 
 

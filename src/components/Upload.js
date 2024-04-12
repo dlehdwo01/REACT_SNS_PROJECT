@@ -26,6 +26,15 @@ const Upload = (props) => {
         boardContents: ""
     });
 
+    // SECTION 외 다른부분 클릭시 닫힘
+    const handleOutsideClick = (event) => {
+        if (!event.target.closest('.modalSection')) {
+            props.onCancel();
+            document.body.style.overflow = 'auto';
+        }
+    };
+    document.addEventListener("mousedown", handleOutsideClick);
+
 
     const [order, setOrder] = useState(1);
     const navigate = useNavigate();
@@ -159,7 +168,7 @@ const Upload = (props) => {
                                 <div className='btnSort'>
                                     <button className='completeBtn' onClick={fnUpload}>완료</button>
                                     <button className='completeBtn' onClick={() => { setOrder(1) }}>사진 추가</button>
-                                    <button style={{ backgroundColor: 'rgba(255, 0, 0, 0.5)',color:'white' }} className='completeBtn' onClick={() => {
+                                    <button style={{ backgroundColor: 'rgba(255, 0, 0, 0.5)', color: 'white' }} className='completeBtn' onClick={() => {
                                         fnDelete(fileNo);
                                     }}>현재 사진 삭제</button>
 
