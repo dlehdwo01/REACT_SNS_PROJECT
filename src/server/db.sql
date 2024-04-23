@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `tbl_alert` (
   PRIMARY KEY (`ALERTNO`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- 내보낼 데이터가 선택되어 있지 않습니다.
+-- 테이블 데이터 sns.tbl_alert:~0 rows (대략적) 내보내기
 
 -- 테이블 sns.tbl_board 구조 내보내기
 CREATE TABLE IF NOT EXISTS `tbl_board` (
@@ -39,9 +39,29 @@ CREATE TABLE IF NOT EXISTS `tbl_board` (
   `CONTENTS` varchar(5000) DEFAULT NULL,
   `CDATETIME` datetime DEFAULT NULL,
   PRIMARY KEY (`BOARDNO`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- 내보낼 데이터가 선택되어 있지 않습니다.
+-- 테이블 데이터 sns.tbl_board:~17 rows (대략적) 내보내기
+INSERT INTO `tbl_board` (`BOARDNO`, `USERID`, `CONTENTS`, `CDATETIME`) VALUES
+	(1, 'test', 'asdasd', '2024-04-05 17:16:48'),
+	(2, 'test', 'asdasd', '2024-04-05 17:17:12'),
+	(13, 'test', 'asdasd', '2024-04-05 17:26:00'),
+	(14, 'test', 'asdasd', '2024-04-05 17:26:09'),
+	(15, 'test', 'asdasd', '2024-04-05 17:26:17'),
+	(16, 'test', 'ㅁㄴㅇㅁㄴㅇ', '2024-04-05 17:34:03'),
+	(17, 'test', '2개 했어요', '2024-04-08 16:10:28'),
+	(18, 'test', '움헤헤 이거도 두개', '2024-04-08 17:16:41'),
+	(19, 'test', '움하하하', '2024-04-09 14:33:40'),
+	(20, 'test', '내가 제일 잘나가', '2024-04-09 15:06:38'),
+	(21, 'test', '유후', '2024-04-09 15:16:58'),
+	(22, 'asd', '곰돌짱', '2024-04-09 15:18:47'),
+	(23, 'asd', '바쁘다 바빠', '2024-04-09 15:19:18'),
+	(24, 'asd', '인스타그램입니다', '2024-04-09 16:22:15'),
+	(25, 'test', '엄청 많이 등록하기', '2024-04-11 11:03:29'),
+	(26, 'test', '엄청 많이 등록했따', '2024-04-11 11:13:01'),
+	(27, 'test', '엄청 길게 쓸거야\r\n엄청 길게 쓸거야\r\n엄청 길게 쓸거야\r\n엄청 길게 쓸거야\r\n엄청 길게 쓸거야\r\n엄청 길게 쓸거야\r\n엄청 길게 쓸거야\r\n엄청 길게 쓸거야\r\n엄청 길게 쓸거야\r\nㅍ\r\n엄청 길게 쓸거야\r\n엄청 길게 쓸거야\r\n엄청 길게 쓸거야\r\n엄청 길게 쓸거야\r\n엄청 길게 쓸거야\r\n엄청 길게 쓸거야\r\n엄청 길게 쓸거야\r\n엄청 길게 쓸거야\r\n엄청 길게 쓸거야\r\n엄청 길게 쓸거야\r\n엄청 길게 쓸거야\r\n엄청 길게 쓸거야\r\n엄청 길게 쓸거야\r\n엄청 길게 쓸거야\r\n', '2024-04-11 11:55:19'),
+	(28, 'test1', '도쿄에서 차 한잔 ^^', '2024-04-11 14:30:55'),
+	(29, 'test2', '', '2024-04-11 15:38:15');
 
 -- 테이블 sns.tbl_board_file 구조 내보내기
 CREATE TABLE IF NOT EXISTS `tbl_board_file` (
@@ -53,9 +73,53 @@ CREATE TABLE IF NOT EXISTS `tbl_board_file` (
   `FILESIZE` varchar(50) DEFAULT NULL,
   `FILEETC` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`FILENO`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- 내보낼 데이터가 선택되어 있지 않습니다.
+-- 테이블 데이터 sns.tbl_board_file:~42 rows (대략적) 내보내기
+INSERT INTO `tbl_board_file` (`FILENO`, `BOARDNO`, `FILEPATH`, `FILENAME`, `FILEORGNAME`, `FILESIZE`, `FILEETC`) VALUES
+	(6, 1, 'boardFile/', '1712303967457.png', 'left.png', '593', 'png'),
+	(10, 2, 'boardFile/', '1712304235753.png', 'left.png', '593', 'png'),
+	(11, 0, 'boardFile/', '1712305110015.png', 'left.png', '593', 'png'),
+	(12, 0, 'boardFile/', '1712305146599.png', 'left.png', '593', 'png'),
+	(13, 0, 'boardFile/', '1712305163984.png', 'left.png', '593', 'png'),
+	(14, 0, 'boardFile/', '1712305215601.png', 'left.png', '593', 'png'),
+	(15, 0, 'boardFile/', '1712305236710.png', 'left.png', '593', 'png'),
+	(16, 0, 'boardFile/', '1712305250263.png', 'left.png', '593', 'png'),
+	(17, 0, 'boardFile/', '1712305285562.png', 'left.png', '593', 'png'),
+	(18, 13, 'boardFile/', '1712305560697.png', 'left.png', '593', 'png'),
+	(19, 14, 'boardFile/', '1712305569240.png', 'left.png', '593', 'png'),
+	(20, 15, 'boardFile/', '1712305577096.png', 'left.png', '593', 'png'),
+	(21, 16, 'boardFile/', '1712306043495.png', 'logo.png', '115999', 'png'),
+	(22, 17, 'boardFile/', '1712560228905.gif', '1712541590306.gif', '13853', 'gif'),
+	(23, 17, 'boardFile/', '1712560228906.png', '1712541441676.png', '833702', 'png'),
+	(24, 18, 'boardFile/', '1712564201435.png', '1712541441676.png', '833702', 'png'),
+	(25, 18, 'boardFile/', '1712564201440.gif', '1712308541719.gif', '13853', 'gif'),
+	(26, 19, 'boardFile/', '1712640820199.png', 'logo.png', '115999', 'png'),
+	(27, 19, 'boardFile/', '1712640820200.png', 'logo_gray.png', '69458', 'png'),
+	(28, 20, 'boardFile/', '1712642798027.jpg', 'cup-7.jpg', '16841', 'jpg'),
+	(29, 21, 'boardFile/', '1712643418763.jpg', 'cup-7.jpg', '16841', 'jpg'),
+	(30, 22, 'boardFile/', '1712643527272.jpg', 'bear.jpg', '19738', 'jpg'),
+	(31, 23, 'boardFile/', '1712643558116.jpg', 'bear.jpg', '19738', 'jpg'),
+	(32, 23, 'boardFile/', '1712643558117.jpg', 'programming.jpg', '15353', 'jpg'),
+	(33, 24, 'boardFile/', '1712647335671.png', 'sns-3.png', '1546', 'png'),
+	(34, 25, 'boardFile/', '1712801009505.png', 'logo.png', '115999', 'png'),
+	(35, 25, 'boardFile/', '1712801009506.png', 'logo.png', '115999', 'png'),
+	(36, 25, 'boardFile/', '1712801009508.png', 'pencil.png', '6265', 'png'),
+	(37, 25, 'boardFile/', '1712801009508.gif', 'zz.gif', '13853', 'gif'),
+	(38, 25, 'boardFile/', '1712801009508.png', 'left.png', '593', 'png'),
+	(39, 25, 'boardFile/', '1712801009508.gif', 'zz.gif', '13853', 'gif'),
+	(40, 26, 'boardFile/', '1712801581244.gif', 'zz.gif', '13853', 'gif'),
+	(41, 26, 'boardFile/', '1712801581244.png', 'logo.png', '115999', 'png'),
+	(42, 26, 'boardFile/', '1712801581246.png', 'logo_gray.png', '69458', 'png'),
+	(43, 26, 'boardFile/', '1712801581250.PNG', 'íë ¨ê³¼ì .PNG', '170522', 'PNG'),
+	(44, 26, 'boardFile/', '1712801581251.PNG', 'íë ¨ê³¼ì .PNG', '170522', 'PNG'),
+	(45, 26, 'boardFile/', '1712801581253.PNG', 'íë ¨ê³¼ì ë³ë ì§1.PNG', '138157', 'PNG'),
+	(46, 26, 'boardFile/', '1712801581254.PNG', 'ìº¡ì².PNG', '30607', 'PNG'),
+	(47, 26, 'boardFile/', '1712801581254.PNG', 'íë ¨ê³¼ì .PNG', '170522', 'PNG'),
+	(48, 26, 'boardFile/', '1712801581256.PNG', 'íë ¨ê³¼ì ë³ë ì§2.PNG', '160111', 'PNG'),
+	(49, 27, 'boardFile/', '1712804119552.png', 'pencil.png', '6265', 'png'),
+	(50, 28, 'boardFile/', '1712813455217.jpg', 'cup-4.jpg', '16245', 'jpg'),
+	(51, 29, 'boardFile/', '1712817495855.png', 'íê·¹ê¸°.png', '3007', 'png');
 
 -- 테이블 sns.tbl_board_like 구조 내보내기
 CREATE TABLE IF NOT EXISTS `tbl_board_like` (
@@ -63,18 +127,57 @@ CREATE TABLE IF NOT EXISTS `tbl_board_like` (
   `USERID` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- 내보낼 데이터가 선택되어 있지 않습니다.
+-- 테이블 데이터 sns.tbl_board_like:~24 rows (대략적) 내보내기
+INSERT INTO `tbl_board_like` (`BOARDNO`, `USERID`) VALUES
+	(21, 'asd'),
+	(19, 'asd'),
+	(20, 'asd'),
+	(18, 'asd'),
+	(15, 'asd'),
+	(23, 'test'),
+	(22, 'test'),
+	(24, 'test'),
+	(19, 'test'),
+	(17, 'test'),
+	(16, 'test'),
+	(21, 'test'),
+	(23, 'asd'),
+	(15, 'test'),
+	(25, 'test'),
+	(26, 'test'),
+	(27, 'test1'),
+	(28, 'test1'),
+	(26, 'test2'),
+	(28, 'test2'),
+	(29, 'test2'),
+	(27, 'test2'),
+	(27, 'test'),
+	(29, 'test');
 
 -- 테이블 sns.tbl_comment 구조 내보내기
 CREATE TABLE IF NOT EXISTS `tbl_comment` (
   `COMMENTNO` int NOT NULL AUTO_INCREMENT,
+  `BOARDNO` int DEFAULT NULL,
   `USERID` varchar(50) DEFAULT NULL,
   `CONTENTS` varchar(50) DEFAULT NULL,
   `CDATETIME` datetime DEFAULT NULL,
   PRIMARY KEY (`COMMENTNO`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- 내보낼 데이터가 선택되어 있지 않습니다.
+-- 테이블 데이터 sns.tbl_comment:~11 rows (대략적) 내보내기
+INSERT INTO `tbl_comment` (`COMMENTNO`, `BOARDNO`, `USERID`, `CONTENTS`, `CDATETIME`) VALUES
+	(2, 29, 'test', '대한민국 만세', '2024-04-11 17:34:46'),
+	(3, 29, 'test', '대한민국 만세2', '2024-04-11 17:36:18'),
+	(4, 27, 'test', '너무 길게썼나??', '2024-04-11 18:07:25'),
+	(5, 27, 'test', '움하하', '2024-04-11 18:08:57'),
+	(6, 27, 'test', '움하하123', '2024-04-11 18:09:08'),
+	(7, 27, 'test', '움하하123ㅁㄴㅇㅁㄴㅇㅁㄴㅇ', '2024-04-11 18:11:01'),
+	(8, 27, 'test', 'zaaa', '2024-04-12 09:43:10'),
+	(9, 27, 'test', 'zzzzzzzzzz', '2024-04-12 09:43:12'),
+	(10, 27, 'test', 'sdasdasd', '2024-04-12 09:43:13'),
+	(11, 27, 'test', 'sdasdasd', '2024-04-12 09:43:14'),
+	(12, 27, 'test', 'adsasdasd', '2024-04-12 09:43:15'),
+	(13, 28, 'test', '맛있겠다 ~~', '2024-04-12 14:11:29');
 
 -- 테이블 sns.tbl_friend 구조 내보내기
 CREATE TABLE IF NOT EXISTS `tbl_friend` (
@@ -83,7 +186,10 @@ CREATE TABLE IF NOT EXISTS `tbl_friend` (
   `STATUS` varchar(50) DEFAULT NULL COMMENT '팔로잉,차단 상태'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- 내보낼 데이터가 선택되어 있지 않습니다.
+-- 테이블 데이터 sns.tbl_friend:~2 rows (대략적) 내보내기
+INSERT INTO `tbl_friend` (`USERID`, `FRIENDID`, `STATUS`) VALUES
+	('test', 'test2', 'FOLLOW'),
+	('test', 'test1', 'FOLLOW');
 
 -- 테이블 sns.tbl_search 구조 내보내기
 CREATE TABLE IF NOT EXISTS `tbl_search` (
@@ -92,7 +198,7 @@ CREATE TABLE IF NOT EXISTS `tbl_search` (
   `CDATE` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- 내보낼 데이터가 선택되어 있지 않습니다.
+-- 테이블 데이터 sns.tbl_search:~0 rows (대략적) 내보내기
 
 -- 테이블 sns.tbl_user 구조 내보내기
 CREATE TABLE IF NOT EXISTS `tbl_user` (
@@ -112,7 +218,16 @@ CREATE TABLE IF NOT EXISTS `tbl_user` (
   PRIMARY KEY (`USERID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- 내보낼 데이터가 선택되어 있지 않습니다.
+-- 테이블 데이터 sns.tbl_user:~7 rows (대략적) 내보내기
+INSERT INTO `tbl_user` (`USERID`, `NAME`, `PWD`, `NICKNAME`, `INTRODUCE`, `SECRET`, `CDATETIME`, `PHONE`, `FILEPATH`, `FILENAME`, `FILEORGNAME`, `FILESIZE`, `FILEETC`) VALUES
+	('a', '', 'a', 'a', NULL, NULL, '2024-04-05 10:24:33', NULL, NULL, NULL, NULL, NULL, NULL),
+	('asd', '', 'asd', '멋진놈', '나는야 멋쟁이', NULL, '2024-04-05 10:26:09', NULL, 'profileFile/', '1712642465012.png', 'redheart.png', '1360', 'png'),
+	('asdf', '', 'asd', 'asd', NULL, NULL, '2024-04-05 10:27:01', NULL, NULL, NULL, NULL, NULL, NULL),
+	('qwe', '', 'asd', 'asd', NULL, NULL, '2024-04-05 10:30:55', NULL, NULL, NULL, NULL, NULL, NULL),
+	('qwe123', 'qwe', 'qwe', 'qwe', NULL, NULL, '2024-04-05 11:20:11', NULL, NULL, NULL, NULL, NULL, NULL),
+	('test', 'mangGom', '1234', '망그러진 곰', '안녕하세요 저는 망그러진 곰입니다', 'N', NULL, '01063824246', 'profileFile/', '1712560405011.gif', '1712541590306.gif', '13853', 'gif'),
+	('test1', '테스트', '1234', 'iloveyoukuma', '와타시와 쿠마데스', NULL, '2024-04-11 14:29:11', NULL, 'profileFile/', '1712813389144.jpg', 'bear.jpg', '19738', 'jpg'),
+	('test2', 'test2', '1234', 'korean', 'korean', NULL, '2024-04-11 15:28:33', NULL, 'profileFile/', '1712817470654.png', 'íê·¹ê¸°.png', '3007', 'png');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
