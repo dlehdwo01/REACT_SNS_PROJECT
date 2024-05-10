@@ -8,8 +8,7 @@
     <div style= "text-align:left;">
     <h2 style="border-bottom: 1px solid #d8dee4; color: #282d33;"> 🗓 개발 기간 </h2>  
         <ul>
-            <li> <h4>04/04 ~ 04/10</h4>               
-            </li>
+            <li> <h4>24.04/04 ~ 24.04/10</h4></li>
         </ul>
     </div>    
 <div style= "text-align:left;"> 
