@@ -18,8 +18,7 @@
       
 <div style= "text-align:left;">
     <h2 style="color: #282d33;"> 🛠️ 사용 언어 </h2>
-    <div style="margin: 0 auto; text-align: left;" align= "left"> <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=for-the-badge&logo=Spring Boot&logoColor=white">
-          
+    <div style="margin: 0 auto; text-align: left;" align= "left">
           </div>
     </div>    
 <!--     <div style= "text-align:left;">
