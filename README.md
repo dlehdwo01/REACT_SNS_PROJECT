@@ -3,6 +3,7 @@
 </div>
 <div style= "text-align:left;">
     <h2 style="border-bottom: 1px solid #d8dee4; color: #282d33;">💡 프로젝트 소개 </h2>
+  <div>요즘 핫한 인스타그램을 카피하여 만든 SNS 페이지 입니다.</div>
     </div>
     <div style= "text-align:left;">
     <h2 style="border-bottom: 1px solid #d8dee4; color: #282d33;"> 🗓 개발 기간 </h2>  
