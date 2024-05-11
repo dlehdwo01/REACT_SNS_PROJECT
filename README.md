@@ -3,7 +3,8 @@
 </div>
 <div style= "text-align:left;">
     <h2 style="border-bottom: 1px solid #d8dee4; color: #282d33;">💡 프로젝트 소개 </h2>
-  <div>인스타그램 UI를 카피하여 만든 SNS 페이지 입니다.</div>
+  <div>Express 서버와 React, MySQL을 활용하여 만든 SNS 페이지 입니다.</div>
+  <div>시간이 많지 않음을 고려하여 UI 디자인은 인스타그램을 카피하였으며 기능 위주로 개발을 진행하였습니다. </div>
     </div>
     <div style= "text-align:left;">
     <h2 style="border-bottom: 1px solid #d8dee4; color: #282d33;"> 🗓 개발 기간 </h2>  
