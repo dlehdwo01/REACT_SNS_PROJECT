@@ -54,6 +54,12 @@
       <div>- 게시물 Hover시 게시물 댓글수와 좋아요 수 출력 </div>
       <div>- 팔로워 및 팔로우 수 출력 -> 클릭시 해당 유저 목록 출력 및 삭제 기능 </div>
       <div>- 프로필 수정 기능 </div>
+      <li><h4>5. 게시글 등록(사이드바의 만들기 버튼)</h4></li>      
+      <div><img src='https://github.com/dlehdwo01/REACT_SNS_PROJECT/assets/153072974/e5222770-e758-4894-8de3-7a6ac7cb2636'></img></div>
+      <div><h5>구현기능</h5></div>
+      <div>- 드래그 혹은 클릭을 이용하여 파일 등록</div>
+      <div>- 사진 여러장 등록 및 선택 사진 삭제 기능 구현</div>      
+      <div>- 등록한 사진 미리보기 기능 제공</div>      
     </ul>
     
 <!--     <h2 style="border-bottom: 1px solid #d8dee4; color: #282d33;"> 🎇 프로젝트 후기 </h2>       
